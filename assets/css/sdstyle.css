@@ -1,0 +1,337 @@
+.pre-lodder{    position: fixed;
+    background: #fff;
+    width: 100%;
+    text-align: center;
+    z-index: 99999999;
+    height: 100%;
+    display: none;
+  }
+
+  .preloading .pre-lodder{
+    display: block;
+  }
+
+
+.pre-lodder img {
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    width: 250px;
+    max-width: 100%;
+    margin-top: -125px;
+    left: 50%;
+    margin-left: -125px;
+}
+
+
+.register .form-group{position: relative;}
+
+.login-wrap span{text-align: center;
+  margin-top: 10px;
+display: block;}
+
+.panel{border-color: transparent;}
+
+
+.panel input.btn{      background: #269af2;
+    color: #ffffff;
+    font-size: 16px;
+    width: 130px;
+    border-radius: 25px;
+    text-transform: uppercase;
+}
+
+.panel input.btn:hover{background: #3c4b52;}
+
+.step.login-sec{    padding: 20px; }
+
+.login-user-type{margin-bottom: 30px;}
+
+
+.step p {
+    line-height: 18px;
+}
+
+
+
+.wrap-sec input.btn-white{        background: #ffffff;
+    color: #2699f2;
+    font-size: 16px;
+    width: 130px;
+    border-radius: 25px;
+    text-transform: uppercase;}
+
+    .step{    padding-bottom: 50px;}
+
+
+
+
+.success i{        background: white;
+    color: #2699f2;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 50%;
+    position: absolute;
+    left: -40px;
+    top: 2px;}
+
+      p.success{        margin-left: 35px;}
+
+    .success{position: relative;}
+
+
+    .form-group .error {
+    color: #fff;
+    position: absolute;
+    background: #f54a4a;
+    padding: 0 6px;
+    border-radius: 3px;
+    bottom: -10px;
+    font-size: 13px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    text-align: center;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+.form-group:hover .error{
+    padding: 4px 6px;
+    bottom: -22px;
+    height: auto;
+    overflow: visible;
+}
+
+.form-group .error:before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #f54a4a transparent;
+}
+
+
+
+.error{color: red;}
+
+
+.menu-section li a.active {
+    color: #269af2;
+    background: transparent;
+    outline: none;
+    border: none;
+}
+
+.menu-section li a.active:before {
+    content: "";
+    width: 100%;
+    color: #fff;
+}
+
+.menu-section li a:before{
+    left: 0;
+}
+
+
+
+.menu-section li.active a {
+    color: #269af2;
+    background: transparent;
+    outline: none;
+    border: none;
+}
+
+.menu-section li.active a:before {
+    content: "";
+    width: 100%;
+    color: #fff;
+}
+
+.menu-section li a:before{
+    left: 0;
+}
+
+header{
+    transition: all 0.3s;
+    background: #ffffff;
+    top: -200px;
+}
+
+header.sticky{
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    top: 0;
+    z-index: 999999;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.bx-pager{
+    display: none;
+}
+
+
+.btn:focus, .btn:active, .btn:visited, .btn:hover, .btn{
+    outline: none;
+    box-shadow: none;
+}
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{
+    outline: none;
+}
+
+#signin-form_id .form-control:focus{
+    outline: none;
+    box-shadow: none;
+    border-bottom: 1px solid #269af2!important;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+
+.sm-ft ul {
+    margin: 0;
+    font-size: 15px;
+    padding-bottom: 0;
+    float: left;
+}   
+
+
+.sm-ft {
+    float: left;
+    padding: 40px 0 40px;
+    padding-left: 0;
+    width: 100%;
+}
+
+.sm-ft p {
+    text-align: left;
+    margin-left: 10px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.61);
+    float: right;
+    margin-bottom: 0;
+}
+
+.sm-ft li {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.success ~ .register, .success ~ h2, .success ~ p{
+    display: none;
+}
+.step{
+    min-height: 620px!important;
+}
+
+
+.step  p.success  {
+    line-height: 33px;
+    font-size: 25px;
+    text-align: center;
+}
+
+
+p.success {
+    margin-left: 0;
+    padding-top: 135px;
+    margin-top: 100px;
+}
+
+.success i {
+    background: white;
+    color: #2699f2;
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+    font-size: 40px;
+    text-align: center;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 38px;
+    margin-left: -37px;
+}
+
+
+.step.no-min-h{
+    min-height: 1px !important;
+}
+
+.animatednew{
+    background: transparent!important;
+}
+
+
+.row .form-group:first-child .error{
+        left: 15px;
+        right: 7px;
+}
+
+.step .register input{
+    margin-bottom: 0;
+}
+
+
+.step .register select{
+    margin-bottom: 0;
+}
+
+.step .register .form-group{
+    margin-bottom: 15px;        
+}
+
+
+.row .form-group:last-child .error{
+        left: 7px;
+        right: 15px;
+}
+
+
+.form-group:hover .error {
+    padding: 4px 6px;
+    bottom: auto;
+    height: auto;
+    overflow: visible;
+    top: 36px;
+    z-index: 99999;
+}
+.form-group img {
+    position: absolute;
+    right: 24px;
+    top: 10px;
+    z-index: 999;
+}
+
+.col-sm-12.form-group .error{
+       left: 15px!important; 
+}
+
+.form-control{
+    border-radius: 2px;
+}
+
+
+.form-group.formerror:before {
+    content: "\f071";
+    font-family: FontAwesome;
+    position: absolute;
+    color: #ec0909;
+    right: 20px;
+    top: 15px;
+}
+
+.row .form-group.formerror:last-child:before {
+    right: 30px;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+    background: #eeeeee!important;
+} 

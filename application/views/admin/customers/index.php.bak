@@ -1,0 +1,89 @@
+<div id="content">
+    <div class="box-element">
+        <div class="box-head">
+            <h3><?php echo $title; ?></h3>			 
+        </div>
+        <div class="productbox">
+            <?php echo form_open('admin/customers/index', array('name' => 'search', 'id' => 'search')); ?>
+            <table class="table" width="100%" border="0" cellspacing="2" cellpadding="0">
+                <tr>
+                    <td align="left">
+                        Search key :
+                        <input type="text" name="key" size="32" value="<?php echo $this->input->post("key"); ?>" />
+                        <input type="submit" name="submit" value="Search" id="search" class="save" />
+                        <input type="button" name="showall" value="Show All" id="search" onclick="window.location = '<?php site_url('admin/oem') ?>'" />
+                    </td>
+                </tr>
+            </table>
+            <?php echo form_close(); ?>
+            <div class="pagination" style="float:left; color:#FF0000;">
+                <?php
+                if ($this->session->flashdata('activatemessage')) {
+                    echo $this->session->flashdata('activatemessage');
+                }
+                ?>
+            </div>
+            <?php if (is_array($result) && sizeof($result) > 0) { ?>
+                <div class="pagination" style="float:right;">
+                    <?php echo $paginglinks; ?></div>
+                <div class="table-light">
+                    <div class="table-header">
+                        <div class="table-caption">
+                            <?php echo $title; ?>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CompanyID</th>
+                                <th>CompanyName</th>
+                                <th>CompanyProfile</th>
+                                <th>Contact</th>
+                                <th>Suppliers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $n = 0;
+                            $counter = 0;
+                            $counter = $counter + $per_page;
+
+                            foreach ($result as $key => $value) {
+
+                                $counter++;
+                                ?>
+                                <tr>
+                                    <td><?php echo $value['UserId']; ?></td>
+                                    <td><?php echo $value['CompanyName']; ?></td>
+                                    <td><a href="<?php echo site_url('admin/customers/companyprofile/' . $value['UserId']) ?>">View</a></td>
+                                    <td><a href="<?php echo site_url('admin/customers/contact/' . $value['UserId']) ?>">View</a></td>
+                                    <td><a href="<?php echo site_url('admin/customers/suppliers/' . $value['UserId']) ?>">View</a></td>
+                                </tr>	
+
+                                <?php
+                            }
+                            ?>							
+
+                        </tbody>
+                    </table>
+<!--                    <div class="table-footer">
+                        Footer
+                    </div>-->
+                </div>
+
+                <div class="pagination" style="float:right;">
+                    <?php echo $paginglinks; ?></div>
+
+            <?php } else { ?>
+                <p align="center">No Record Found!</p>
+            <?php } ?>
+
+
+            <p>&nbsp;</p>
+
+        </div>
+        <div class="clear"></div>			
+    </div>
+    <div class="clear"></div>
+</div>
+

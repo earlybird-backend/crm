@@ -1,0 +1,47 @@
+<br/><br/><br/><br/>
+<!--Default tables-->
+<?php 
+if(is_array($quotedata) && sizeof($quotedata)>0)
+{							 
+
+?>
+				<div class="panel">
+					<div class="panel-heading">
+						<span class="panel-title">Supplier Quotes</span>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Supplier</th>
+									<th>Bid Type</th>
+									<th>Bid Rate</th>
+									<th>CreateTime</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+							$m=1;
+							foreach($quotedata as $key=>$value) {?>
+								<tr>
+									<td><?php echo $m; ?></td>
+									<td><?php echo $value['supplier']; ?></td>
+									<td><?php echo $value['BidType']; ?></td>
+									<td><?php echo $value['BidRate'].'%'; ?></td>
+									<td><?php echo $value['AddedDate']; ?></td>
+								</tr>
+							<?php 
+								$m++; 
+								} 
+							?>	
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+<?php }else{ ?>
+No Reocrd Found
+<?php }?>
+<!-- /5. $DEFAULT_TABLES -->

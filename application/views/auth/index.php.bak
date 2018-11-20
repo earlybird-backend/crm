@@ -1,0 +1,138 @@
+<section class="bg-white">
+    <div class="bag-sec-wrap">
+        <div class="bag-sec">
+
+        </div>
+
+        <div class="bag-wrap">
+            <div class="wrap-sec">
+                <div class="img-sec">
+                    <a href="#" class="logo">
+                        <img src="<?php echo base_url(); ?>assets/images/logo.png">
+                    </a>
+                    <p style="text-align:center;"><?php
+                        if ($this->session->flashdata('message')) {
+                            echo $this->session->flashdata('message');
+                        }
+                        ?>
+                    </p>
+                </div>
+                <div class="row step no-min-h login-sec">
+                    <?php echo form_open_multipart('auth', array('name' => 'login', 'id' => 'signin-form_id', 'class' => 'panel register')); ?>
+                        <div class="login-user-type text-center margin_40">
+							<div class="login-wrap">
+                               <input type="radio" name="type" id="customer" value="customer"  <?php echo (set_value('type') == 'customer') ? 'checked' : ''; ?> checked="checked" />
+                                <label for="customer">
+                                    <span class="img-wrap-uset">
+                                        <img src="<?php echo base_url(); ?>assets/images/icon1.png">
+                                    </span>
+                                    <span>Buyer</span>
+                                </label>
+                              
+                            </div>
+
+
+                            <div class="login-wrap">
+                                <input type="radio" name="type" id="customer2" value="supplier" <?php echo (set_value('type') == 'supplier') ? 'checked' : ''; ?> />
+                                <label for="customer2"><span class="img-wrap-uset"><img src="<?php echo base_url(); ?>assets/images/icon2.png"></span><span>Supplier</span></label>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+                           <input type="text" name="EmailAddress" id="EmailAddress" tabindex="1" class="form-control" placeholder="EmailAddress" value="<?php echo set_value('EmailAddress'); ?>" />
+                        <?php echo form_error('EmailAddress', '<p class="error">'); ?>
+
+                        </div>
+
+
+                        <div class="form-group relative pass-login">       
+                            <input type="Password" name="Password" id="Password" tabindex="1" class="form-control" placeholder="Password" value="<?php echo set_value('Password'); ?>" />
+                        <?php echo form_error('Password', '<p class="error">'); ?>
+                            <a href="<?php echo site_url('auth/forgetpassword') ?>" class="forgot">Forget?</a>	
+                        </div>
+
+
+
+                        <div class="text-center btn-step-wrap">
+                            <input class="btn btn-rounded btn-inline btn-theme black-hover" type="submit" value="Login" />
+                        </div>
+
+                    </form>		
+                </div>
+            </div>
+
+            <div class="copyright text-center">© Sigma Technology 2007 - 2017</div>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+</section>
+
+
+
+
+
+
+
+<!--<p style="text-align:center;"><?php
+if ($this->session->flashdata('message')) {
+    echo $this->session->flashdata('message');
+}
+?></p>
+<section class="margin_60 bg-offwhite">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 margin-60">
+                <div class="row step no-min-h">
+
+<?php echo form_open_multipart('auth', array('name' => 'login', 'id' => 'signin-form_id', 'class' => 'panel register')); ?>
+
+                    <div class="login-user-type text-center margin_40">
+
+                        <div class="login-wrap">
+                            <input type="radio" name="type" id="customer" value="customer"  <?php echo (set_value('type') == 'customer') ? 'checked' : ''; ?> checked="checked" /> 
+                            <label for="customer"><span class="img-wrap-uset"><img src="<?php echo base_url(); ?>assets/img/icon1.png"></span> <span>Buyer</span></label>
+                        </div>
+
+
+                        <div class="login-wrap">
+                            <input type="radio" name="type" id="customer2" value="supplier" <?php echo (set_value('type') == 'supplier') ? 'checked' : ''; ?> />	
+                            <label for="customer2"><span class="img-wrap-uset"><img src="<?php echo base_url(); ?>assets/img/icon2.png">	</span> <span>Supplier</span></label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">   
+                        <input type="text" name="EmailAddress" id="EmailAddress" tabindex="1" class="form-control" placeholder="EmailAddress" value="<?php echo set_value('EmailAddress'); ?>">
+<?php echo form_error('EmailAddress', '<p class="error">'); ?>        
+
+                    </div>
+
+
+                    <div class="form-group relative pass-login">           
+                        <input type="Password" name="Password" id="Password" tabindex="1" class="form-control" placeholder="Password" value="<?php echo set_value('Password'); ?>">
+<?php echo form_error('Password', '<p class="error">'); ?>
+                        <a href="<?php echo site_url('auth/forgetpassword') ?>" class="forgot">Forget?</a>	
+                    </div>
+
+
+
+                    <div class="text-center btn-step-wrap">
+                        <input class="btn btn-rounded btn-inline btn-theme btn-step-2" type="submit" value="Login" />
+                    </div>
+
+                    </form>		
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->

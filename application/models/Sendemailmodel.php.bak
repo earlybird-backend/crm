@@ -1,0 +1,151 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class SendEmailModel extends CI_Model {
+
+	public function __construct()
+    {
+        parent::__construct();
+		$this->load->library('phpmailer');
+		
+    } 	
+	## Send Email	
+	public function sendEmail($to,$subject,$body,$name='',$cc='',$bcc='')
+	{
+		
+		$mail = new PHPMailer;
+		$mail->AddAddress($to, $name);            
+		$mail->From		= "stardesign041@gmail.com";
+		$mail->FromName = "EPFO";
+		$mail->Subject 	=  $subject;
+		if($cc!=''){
+			$mail->AddCC($cc);
+		}
+		if($bcc!=''){
+			$mail->AddBCC($cc);
+		}
+		$mail->IsSMTP();
+		$mail->Host = "localhost";
+		$mail->SMTPAuth = False;
+		$mail->WordWrap = 200; 
+		$mail->IsHTML(true);   
+		$mail->Body  = $body;
+		if($mail->Send())
+		{
+			return true;
+		}else{
+			return false;
+		}
+	
+	}
+	
+	## Send Email	
+	public function sendEmailAll($to=array(),$subject,$body,$name='',$cc='',$bcc='')
+	{
+		//echo $body; die;
+		
+		$mail = new PHPMailer;
+		if(count($to) > 0){
+			foreach($to as $v){
+			  if($v)
+			  {
+				$mail->AddAddress($v, $v);	
+			  }
+			}
+			
+		}else{
+			$mail->AddAddress($to, $name);
+		}
+		                  
+		$mail->From		= "stardesign041@gmail.com";
+		$mail->FromName = "EPFO";
+		$mail->Subject 	=  $subject;	
+		
+		$mail->IsSMTP();
+		$mail->Host = "localhost"; 
+		$mail->SMTPAuth = false;
+		$mail->WordWrap = 200; 
+		$mail->IsHTML(true);   
+		$mail->Body  = $body;
+		
+		//$mail->Send();
+		if($mail->Send())
+		{
+			return true;
+		}else{
+			return false;
+		}
+	
+	}	
+
+	public function sendNewsletterEmail($to,$subject,$body,$name='',$FromEmail='',$cc='',$bcc='')
+	{
+		$mail = new PHPMailer;
+		$mail->AddAddress($to, $name);                  
+		if($FromEmail==''){
+			$mail->From		= "stardesign041@gmail.com";
+		}else{
+			$mail->From		= $FromEmail;
+		}
+		$mail->FromName = "EPFO";
+		$mail->Subject 	=  $subject;	
+		if($cc!=''){
+			$mail->AddCC($cc);
+		}
+		if($bcc!=''){
+			$mail->AddBCC($cc);
+		}
+		$mail->IsSMTP();
+		$mail->Host = "localhost"; 
+		$mail->SMTPAuth = false;
+		$mail->WordWrap = 200; 
+		$mail->IsHTML(true);   
+		$mail->Body  = $body;
+		if($mail->Send())
+		{ 
+			return true;
+		}else{ 
+			return false;
+		}
+	
+	}
+
+	## Send Email	
+	public function sendTellaFriendEmail($to,$to_name='',$from='',$from_name,$subject='',$body,$cc='',$bcc='')
+	{
+		//echo $to.'<br>'.$subject.'<br>'.$name;
+		$mail = new PHPMailer;
+		$mail->AddAddress($to, $to_name);
+		if($from!=''){
+			$mail->From		= $from;
+		}else{
+			$mail->From		= "stardesign041@gmail.com";
+		}
+		if($from_name!=''){
+			$mail->FromName = $from_name;
+		}else{
+			$mail->FromName = "EPFO";
+		}
+		if($subject!=''){
+			$mail->Subject 	=  $subject;
+		}else{
+			$mail->Subject 	= "EPFO : Tell a Friend!!";
+		}
+		
+		if($cc!=''){
+			$mail->AddCC($cc);
+		}
+		if($bcc!=''){
+			$mail->AddBCC($bcc);
+		}
+		$mail->IsSMTP();
+		$mail->Host = "localhost"; 
+		$mail->SMTPAuth = false;
+		$mail->WordWrap = 200; 
+		$mail->IsHTML(true);   
+		$mail->Body  = $body;
+		$mail->Send();
+	
+	}
+
+
+}

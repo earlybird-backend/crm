@@ -1,0 +1,464 @@
+.banner-wrapper:before {
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+86,000000+86,000000+98&0.86+1,0+73 */
+background: -moz-linear-gradient(left, rgba(0,0,0,0.86) 1%, rgba(0,0,0,0) 73%, rgba(0,0,0,0) 86%, rgba(0,0,0,0) 98%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, rgba(0,0,0,0.86) 1%,rgba(0,0,0,0) 73%,rgba(0,0,0,0) 86%,rgba(0,0,0,0) 98%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, rgba(0,0,0,0.86) 1%,rgba(0,0,0,0) 73%,rgba(0,0,0,0) 86%,rgba(0,0,0,0) 98%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#db000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    transform: rotate(0);
+    opacity: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    content: "";
+    position: absolute;
+}
+
+
+.animation_main_home{
+  background: url(../images/animation_bg.png) no-repeat center;
+  background-size: cover;
+  padding-top: 30px;  
+}
+
+
+.supplier .chat-box-wrap {
+    background-image: url(../images/chat_black.png);
+    margin-right: 0;
+    margin-left: -100px;
+    color: #3c4b52;
+}
+
+
+.chat-box-wrap {
+    display: inline-block;
+    padding: 30px 25px 50px;
+    background: url(../images/chat_orange.png);
+    max-width: 175px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    font-size: 14px;
+    color: #3c4b52;
+    font-family: lato_b;
+    line-height: 15px;
+    margin-right: -100px;
+}
+
+
+.animation-img-wrap span:before {
+    border-bottom: 48px solid #3c4b52;
+    border-left: 35px solid transparent;
+    border-right: 35px solid transparent;
+    content: "";
+    position: absolute;
+    left: -35px;
+    right: -35px;
+    bottom: 0;
+    z-index: -1;
+}
+
+.supplier .animation-img-wrap span:before {
+    border-bottom: 48px solid #3c4b52;
+}
+
+
+.h1, h1 {
+    font-size: 35px;
+    color: #3c4b52;
+    font-family: lato_r;
+}
+
+
+.animation-vr-line {
+    width: 3px;
+    height: 370px;
+    display: inline-block;
+    background: #9d9e9e;
+    margin-top: -25px;
+    border-left: 2px dashed #3c4b52;
+    background: transparent;
+}
+
+.emoji-toggle .well {
+    display: block;
+    background: #dce6eb;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.bullets-top i:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    top: 48px;
+    bottom: 0;
+    border-left: 2px dashed #3c4b52;
+    margin-left: -1px;
+    z-index: 0;
+}
+
+
+.bullets-top i:after {
+    font-style: initial;
+    font-size: 14px;
+    color: #279af2;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 46px;
+    display: inline-block;
+    border-radius: 50%;
+    border: 2px solid #3c4b52;
+    margin: 0 17px;
+    background: #f7f9fa;
+    content: "Win";
+}
+
+
+.benefit-head:after{
+  display: none;
+}
+
+.benefit-head:before{
+  display: none;
+}
+
+
+.left-box{
+  border-left: none;
+  border-bottom: none;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 0;
+}
+
+.right-box{
+  border-right: none;
+  border-bottom: none;
+}
+
+.feature-list ul li {
+    font-size: 17px;
+    line-height: 40px;
+}
+
+.left-box .feature-list ul li {
+    padding-left: 28px;
+    position: relative;
+}
+
+
+.benefit-head span {
+    display: block;
+    overflow: hidden;
+    display: table-cell;
+    vertical-align: bottom;
+    padding: 0 10px;
+    font-size: 23px;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 28px;
+    padding-top: 10px;
+    padding-left: 15px;
+}
+
+
+.feature-list ul li:before {
+    font-family: FontAwesome;
+    content: "\f046";
+    position: absolute;
+    left: 0;
+    top: 0px;
+    font-size: 20px;
+    color: #269af2;
+}
+
+
+.feature-list {
+    margin-top: 30px;
+    display: inline-block;
+    width: 100%;
+}
+
+.feature-row-wrap {
+    padding-top: 80px;
+       padding-bottom: 30px;
+}
+
+.benifits.main_benifit {
+    background-image: url(../images/man.png);
+    background-repeat: no-repeat;
+    background-position: 100% bottom;
+    padding-top: 100px;
+}
+
+
+.menu-section a {
+    text-decoration: none;
+    color: #3c4b52;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.menu-section li{
+  padding: 15px 10px;   
+}
+
+.menu-section{
+  margin-right: 10px;   
+}
+
+.logo img{
+  margin-top: 0;
+}
+
+
+/********************22/06/2017********************/
+.step{background: #2699F2;
+  border: solid 1px #2699F2;
+  padding: 30px 30px;
+  padding-bottom: 130px;
+  width: 100%;
+  max-width: 100%;
+}
+.step h2{
+  color: #fff;
+      font-size: 25px;
+    margin-bottom: 15px;
+}
+.step p{
+  color: #fff;
+  line-height: 1px;
+}
+.step h5{
+  color: #fff;
+  font-size: 18px;
+  padding-top: 30px;
+}
+ .btn-wrap-wram{
+    position: absolute;
+    left: 58px;
+    right: 0;
+    bottom: 45px;
+}
+.btn-theme {
+    background: #fff;
+    color: #2699F2;
+    font-size: 16px;
+}
+.step h4{
+  color: #fff;
+  line-height: 35px;
+  padding-bottom: 10px;
+}
+.form-group.form-section{
+  height: 30px;
+}
+.step-sec{
+  width: 100%;
+  max-width: 100%;
+  float: left;
+  display: inline-block;
+}
+.step-sec img {
+    width: 100%;
+    max-width: 100%;
+    padding: 60px;
+}
+.bg-offwhite .bg-images-wrap{
+  background: url(../images/2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    }
+.overlay-section{
+  width: 100%;
+  background: #fff;
+  opacity: 0.9;
+  position: absolute;
+  height: 100%;
+}
+.wrap-sec{
+  width: 100%;
+  padding-left: 30px;
+}
+.sec-wramp{
+  width: 100%;
+  padding-left: 70px;
+}
+
+.btn-step-wrap{
+  margin-top: 30px;
+}
+
+.register{
+  margin-top: 20px;
+}
+
+
+.register .btn-step-wrap{
+  position: initial;
+  margin-top: 25px;
+}
+
+.padd_top_100{
+  padding-top: 100px;
+}
+
+.padd_top_65{
+  padding-top: 65px;
+}
+
+footer.bg_white .bg-theme{
+  background: #ffffff;    
+}
+
+
+footer.bg_white .sm-ft a{
+  color: rgba(60, 75, 82, 0.6);   
+}
+
+
+footer.bg_white  .sm-ft p{
+  color: rgba(60, 75, 82, 0.6);
+}
+
+.name-company {
+    font-size: 20px;
+    margin-top: 20px;
+    line-height: 25px!important;
+}
+
+/****************** LOGIN ********************/
+
+
+.bag-sec-wrap{
+ width: 100%;
+ max-width: 100%;
+}
+.bag-sec{
+ width: 50%;
+ height: 700px;
+ max-width: 100%;
+ background: url(../images/background-for-epfo.jpg);
+ float: left;
+ display: inline-block;
+ background-repeat: no-repeat;
+ background-size: cover;
+}
+.bag-sec img{
+ width: 100%;
+}
+.bag-wrap{
+ width: 50%;
+ background: url(../images/bg-half.png);
+ height: 700px;
+ max-width: 100%;
+ display: block;
+ background-repeat: repeat-x;
+ background-size: cover;
+ float: left;
+}
+.bag-wrap img{
+ width: 100%;
+}
+.img-sec{
+ width: 90%;
+   text-align: center;
+}
+.img-sec a img{
+ width: 170px;
+}
+.step.login-sec{
+ background: #fff;
+ border: 1px solid #fff; 
+}
+
+
+.step.login-sec {
+    background: #fff;
+    border: 1px solid #fff;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
+.step .register input{
+  background: #ffffff;
+}
+
+.forgot {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #269af2;
+    font-family: lato_b;
+    font-size: 15px;
+}
+
+
+.login-wrap input[type="radio"]:checked ~ label .img-wrap-uset:after {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border: 2px solid #5d5e60;
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    background: #269af2;
+    border: none;
+}
+
+
+.register .btn-theme {
+    background: #269af2;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+
+.step.login-sec{
+  padding-bottom: 40px;
+  padding-top: 0;
+  margin-top: 25px;
+}
+
+
+.step.login-sec {
+    padding-bottom: 40px;
+    padding-top: 0;
+    margin-top: 25px;
+    box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.1);
+}
+
+
+@media (max-width: 767px){
+.animation-vr-line {
+    width: 100%;
+    height: 3px;
+    border-left: none;
+    border-bottom: 2px dashed #3c4b52;
+}
+.benifits.main_benifit {
+  background-image: none;
+  padding-top: 40px;
+}
+
+.feature-row-wrap{
+  padding-top: 30px;
+}
+
+.left-box{
+  margin-bottom: 30px;
+}
+
+}
+
+
+

@@ -1,0 +1,310 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body.inner-page{
+	background: #f7f9fa;
+  position: relative;
+  margin: 0;
+  padding-bottom: 200px;
+  min-height: 100%;
+}
+
+
+body.inner-page footer{
+    background: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+}
+
+.inner-header{
+	border-bottom: 3px solid #eaeced;
+	padding-bottom: 20px;
+	background: #ffffff;
+}
+
+.btn-logout{
+	font-family: lato_r;
+}
+.btn-setting{
+	font-size: 23px;
+	color: #4a4f5b;
+}
+
+.btn-setting i{
+	vertical-align: middle;
+	padding-top: 6px;
+}
+
+.btn-setting:hover{
+    color: #ef7c08;
+}
+
+.main-menu {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 0;
+}
+.main-menu li{
+	font-size: 15px;
+}
+
+.main-menu li a{
+	position: relative;
+	color: #2c2f33;
+}
+
+.main-menu li a:hover, .main-menu li.active a, .main-menu li a:focus{
+	text-decoration: none;
+	color: #ef7c08;
+}
+
+.main-menu li a:before{
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -8px;
+	height: 1px;
+	display: inline-block;
+	background: #ef7c08;
+	width: 0px;
+	transition: width 0.5s;
+}
+
+.main-menu li:hover a:before, .main-menu li.active a:before, .main-menu li a:focus:before{
+	width: 100%;
+}
+
+
+
+
+.margin_10{
+    margin: 10px 0;
+}
+
+.margin_20{
+    margin: 20px 0;
+}
+
+.margin_30{
+    margin: 30px 0;
+}
+
+.margin_40{
+    margin: 40px 0;
+}
+
+.margin_50{
+    margin: 50px 0;
+}
+
+.margin_60{
+    margin: 60px 0;
+}
+
+.margin_70{
+    margin: 70px 0;
+}
+
+.margin_80{
+    margin: 80px 0;
+}
+
+.margin_90{
+    margin: 90px 0;
+}
+
+.margin_100
+{margin: 100px 0;
+}
+
+
+
+
+
+
+
+/*********13-5-2017***********/
+
+
+
+
+
+.create-new{text-align: center;}
+
+
+.new-plan{background: #f7f9fa;}
+
+
+.create-new img{max-width: 100%;}
+
+
+
+
+
+/*********separator***********/
+
+
+.separator-mr-10{
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-20{
+    margin: 20px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-30{
+    margin: 30px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-40{
+    margin: 40px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-50{
+    margin: 50px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-60{
+    margin: 60px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-70{
+    margin: 70px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-80{
+    margin: 80px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-90{
+    margin: 90px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.separator-mr-100
+{margin: 100px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+/*********separator***********/
+
+
+
+.hidden-xs-up {
+    display: none!important
+}
+
+@media (max-width: 480px){
+  .cmn-toggle-switch.active span::before, .cmn-toggle-switch.active span::after{
+    background: #000;
+}
+}
+
+@media (max-width:575px) {
+    .hidden-xs-down {
+        display: none!important
+    }
+}
+
+@media (min-width:576px) {
+    .hidden-sm-up {
+        display: none!important
+    }
+}
+
+@media (max-width:767px) {
+    .hidden-sm-down {
+        display: none!important
+    }
+    .main-menu ul li{
+      border-bottom: none;
+      padding-left: 0;
+      padding-right: 0;
+  }
+  .main-menu li a:before{
+      display: none;
+  }
+  .main-menu ul > li i{
+      float: none;
+  }
+
+  .main-menu ul > li hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+.main-menu ul li a:hover, a.show-submenu:hover, a.show-submenu:focus, a.show-submenu-mega:hover, a.show-submenu-mega:focus {
+    color: #ffffff !important;
+    background-color: #ef7c09;
+}
+.main-menu ul li a {
+    padding: 16px 15px !important;
+}
+}
+
+@media (min-width:768px) {
+    .hidden-md-up {
+        display: none!important
+    }
+}
+
+@media (max-width:991px) {
+    .hidden-md-down {
+        display: none!important
+    }
+}
+
+@media (min-width:992px) {
+    .hidden-lg-up {
+        display: none!important
+    }
+}
+
+@media (max-width:1199px) {
+    .hidden-lg-down {
+        display: none!important
+    }
+}
+
+@media (min-width:1200px) {
+    .hidden-xl-up {
+        display: none!important
+    }
+}
+
+.hidden-xl-down {
+    display: none!important
+}
+
+.visible-print-block {
+    display: none!important
+}
+
+}

@@ -1,0 +1,230 @@
+
+/*******************************23-6-2017*********************/
+
+.exam-amount{    border: solid 1px #eeeeee;}
+
+
+
+ .step-3{display:inline-block;
+  border-bottom: solid 3px #eeeeee;
+  width: 100%;
+      margin-bottom: 30px;
+ } 
+
+.step-3 h3 {
+float: left;
+padding: 10px 20px;
+font-size: 20px;
+color: rgba(60, 75, 82, 0.8);
+position: relative;
+}
+
+
+.step-3 h3:before {
+  content: "";
+  top: 52px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    display: inline-block;
+    background: #269af2;
+    width: 0px;
+    transition: width 0.5s;
+      
+
+}
+
+
+.step-3 h3:hover:before{    content: "";
+     width: 100%;
+     color: #fff;}
+
+
+     .step-3 h3:hover{color: #3c4b52;}
+
+
+
+       .step-3 h3:last-child {
+    margin-left: 2px;
+}
+
+
+        .text-left{text-align: left !important;}
+
+
+.table-history>tbody>tr>td{padding-left: 24px ;}
+
+
+.custom-table tr th{    padding: 20px !important;}
+
+
+
+
+.table>thead:first-child>tr:first-child>th{padding: 22px 20px;
+width: 150px;}
+
+
+.margin_60{margin: 60px 0;
+display: inline-block;}
+
+.table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>thead>tr>th{padding: 13px !important;}
+
+.sky-blue{color: #269af2 !important;
+}
+
+
+.green-text{color: #00b22d !important;}
+
+.custom-table tr th:nth-child(2){     padding-right: 67px !important}
+
+
+.btn-sen-inv:hover{
+  text-decoration: none;
+  color: #1288e2;
+}
+
+
+.btn-invite {
+    width: 140px;
+    height: 45px;
+    border-radius: 45px;
+    background: #269af2;
+    color: #ffffff;
+    line-height: 30px;
+    text-transform: uppercase;
+    font-style: normal;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+
+.btn-invite:hover{
+  color: #ffffff;
+}
+
+
+
+.invite_info {
+    font-style: italic;
+    display: inline-block;
+    float: right;
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+
+.settings .steps-wrap{       background: #fff;
+  padding-bottom: 5px;
+ border-bottom: solid #269af2 2px;
+    padding-top: 5px;
+}
+
+
+    .settings .wrap_apr_label .form-group label {
+      display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-family: lato_r;
+    font-weight: 100;
+    margin-top: 5px;
+}
+.settings .pull-right {
+    padding-right: 0;
+}
+
+.settings .warp-label{border-bottom: solid #eeeeee 2px;}
+
+.settings .wrap_apr_label{padding-right: 20px;
+padding-left: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px}
+
+
+    .settings .wrap_apr_label .form-group label a{font-size: 13px;
+        margin-top: 4px;}
+
+    .settings .form-group{margin: auto;}
+
+    .settings .building-ins{position: relative;
+        padding-top: 15px;
+          padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 40px;}
+
+    .settings .building-ins input{
+        border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-color: #dfe8ee;
+    width: 100%;
+    padding: 0 40px;
+    color: #3c4b52;
+    font-size: 15px;
+      padding-bottom: 15px;}
+
+
+
+    .settings .building-ins input:focus{    outline: none;}
+
+            .settings .building-ins i{         position: absolute;
+    color: #ffffff;
+    font-size: 14px;
+    background: #a4b9ca;
+    border-radius: 50%;
+    padding: 0;
+    top: 11px;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    text-align: center;}
+
+
+
+.settings .building-ins input::placeholder{color: #3c4b52}
+
+      .settings .name-com label{padding-left: 20px;
+    margin-top: 30px;
+    color: #3c4b52;
+    font-size: 15px;}
+
+
+
+.margin_30{margin: 30px 0;}
+
+.apr-setting p{        padding-left: 15px;
+    padding-right: 15px;
+    font-style: italic;
+    color: #3c4b52;
+    font-size: 13px;
+    margin-top: 40px;
+    margin-bottom: 15px;}
+
+    .apr-setting a{text-decoration: none;
+      color: #269af2;}
+
+        a.apr-setting-btn{    text-align: center;
+    width: 100%;
+    display: block;
+    background: #e1edf6;
+    margin-bottom: -5px;
+    padding: 5px;}
+
+
+
+    .error{color: #e04343;}
+
+        .error i{margin-right: 3px;}
+
+    .margin_40{    margin: 40px 0;}
+
+
+    tfoot tr th{
+        border-top: 1px solid #ccc  !important;
+    }
+
+
+    table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: normal;
+    font-family: lato_b;
+}
+   

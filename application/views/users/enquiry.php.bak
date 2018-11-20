@@ -1,0 +1,119 @@
+<section class="bg-offwhite bg-images-wrap">
+    <div class="overlay-section"></div>
+    <div class="container">
+
+
+        <div class="row">
+            <div class="col-sm-6 text-center padd_top_65">
+                <img src="<?php echo base_url(); ?>assets/images/reg.png">
+            </div>
+            <div class="col-md-5 col-md-offset-1">
+                <div class="wrap-sec">
+                    <div class="row step">
+                        <?php
+                        if ($this->session->flashdata('inquirymessage')) {
+                            ?><p style="text-align:center;"><?php echo $this->session->flashdata('inquirymessage'); ?></p><?php
+                        }
+                        ?>
+                        <h2>INQUIRY FOR REGISTER</h2>
+                        <p>Please Complete all fields.</p>
+                        <br />
+                        <form class="register" id="register-form" action="" method="post" role="form">                        
+                            <div class="form-group">                                   
+                                <input type="text" name="RequestComment"
+                                       value="<?php echo set_value('RequestComment'); ?>" 
+                                       placeholder="Request Comment" class="form-control form-section" name="">
+                                
+                            </div>
+                            <div class="form-group">    
+<input type="text" name="CompanyName" placeholder="CompanyName" value="<?php echo set_value('CompanyName'); ?>" class="form-control" />
+                                <?php echo form_error('CompanyName', '<p class="error">'); ?>  
+                            </div>
+                            <div class="form-group ">  
+                                <input type="text" name="ContactPerson" 
+                                       value="<?php echo set_value('ContactPerson'); ?>" placeholder="ContactPerson" class="form-control" />
+                                <?php echo form_error('ContactPerson', '<p class="error">'); ?> 
+                            </div> 
+                            <div class="form-group "> 
+                                <input type="text" name="ContactPhone"  minlength="10" maxlength="10" 
+                                       min="0" value="<?php echo set_value('ContactPhone'); ?>" placeholder="ContactPhone" class="form-control" />
+                                <?php echo form_error('ContactPhone', '<p class="error">'); ?>
+
+                            </div>
+                            <div class="form-group ">           
+                                <input type="text" name="ContactEmail" 
+                                       value="<?php echo set_value('ContactEmail'); ?>"  placeholder="Contact Email" class="form-control" />
+                                <?php echo form_error('ContactEmail', '<p class="error">'); ?>
+                            </div>
+                            <div class="text-left btn-step-wrap btn-wrap-wram">
+                                <input class="btn btn-rounded btn-inline btn-white" type="submit" value="Submit" />
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!--<section class="margin_60 bg-offwhite">
+    <div class="container">
+        <p style="text-align:center;"><?php
+if ($this->session->flashdata('inquirymessage')) {
+    echo $this->session->flashdata('inquirymessage');
+}
+?></p>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="row step">
+
+                    <form class="register" id="register-form" action="" method="post" role="form">
+
+                        <div class="form-group"> 
+                            <textarea name="RequestComment" placeholder="Request Comment" class="form-control"><?php echo set_value('RequestComment'); ?></textarea>
+
+
+
+                        </div>
+                        <div class="form-group"> 
+                            <input type="text" name="CompanyName" placeholder="Company Name" value="<?php echo set_value('CompanyName'); ?>" class="form-control" />
+<?php echo form_error('CompanyName', '<p class="error">'); ?>          
+
+
+                        </div>
+
+
+
+                        <div class="form-group"> 
+                            <input type="text" name="ContactPerson" value="<?php echo set_value('ContactPerson'); ?>" placeholder="ContactPerson" class="form-control" />
+<?php echo form_error('ContactPerson', '<p class="error">'); ?>         
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 ">
+                                <input type="text" name="ContactPhone" value="<?php echo set_value('ContactPhone'); ?>" placeholder="ContactPhone" class="form-control" />
+<?php echo form_error('ContactPhone', '<p class="error">'); ?>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <input type="text" name="ContactEmail" value="<?php echo set_value('ContactEmail'); ?>"  placeholder="Contact Email" class="form-control" />
+<?php echo form_error('ContactEmail', '<p class="error">'); ?>
+                            </div>
+                        </div>
+
+                        <div class="text-center btn-step-wrap">
+                            <input class="btn btn-rounded btn-inline btn-theme" type="submit" value="Submit" />
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->

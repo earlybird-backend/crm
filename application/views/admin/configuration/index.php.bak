@@ -1,0 +1,56 @@
+<div id="content">
+          <div class="box-element">
+            <div class="box-head">
+              <h3><?php echo $title;?></h3>
+			  <b><?php echo anchor('admin/configuration/edit', 'Edit');?></b>
+            </div>
+            <div class="productbox">
+<table width="100%" border="0" cellspacing="4" cellpadding="0">
+<tr>
+<td width="157">&nbsp;</td>
+<td width="806" style="color:#FF0000;">
+<?php 
+echo validation_errors();
+if($this->session->flashdata('message'))
+{
+ echo $this->session->flashdata('message');
+}
+?>
+</td>
+</tr>
+</table>
+<?php extract($result[0]);?>
+<table width="100%" cellspacing="0" cellpadding="4" border="0" class="data">
+<tbody>
+	<tr>
+		<th width="25%" valign="middle">Title</td>
+		<th width="75%" valign="middle">Value</td>		
+	</tr>
+	<tr class="even">
+		<td>PlanStartTime</td>
+		<td><?php echo $PlanStartTime;?></td>
+	</tr>
+		
+	<tr>
+		<td>PlanEndTime</td>
+		<td><?php echo $PlanEndTime;?></td>
+	</tr>	
+	
+	<tr class="even">
+		<td>ProposalTime</td>
+		<td><?php echo $ProposalTime;?></td>
+	</tr>
+		
+	<tr>
+		<td>ApproveProposalTime</td>
+		<td><?php echo $ApproveProposalTime;?></td>
+	</tr>
+	
+	
+</tbody>
+</table>
+	</div>
+	<div class="clear"></div>			
+  </div>
+  <div class="clear"></div>
+</div>
