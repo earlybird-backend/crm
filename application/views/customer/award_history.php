@@ -241,7 +241,7 @@
                     $(table.cells().nodes() ).removeClass( 'highlight' );
                 } )
                 .on('click', 'a', function() {
-                    link = "<?php echo base_url($link) . "/";?>" + $(this).attr("name") + "/market_id=" + $(this).parent().parent().attr("id");
+                    link = "<?php echo base_url($link) . "/";?>" + $(this).attr("name") + "/cashpoolCode=<?php echo $cashpoolCode; ?> " ;
                     location.href = link;
                 });
 
@@ -286,8 +286,8 @@
                     newdate.setDate((newdate.getDate() + 1) - 1 * $('select[name="cleardate"]').val())
                     startdate = getFormatDate(newdate);
 								}
-                cleardate = "&start="+startdate+"&end="+enddate;
-								window.location.href = '/customer/customer/history?marketid='+marketid+cleardate+cleartype+"&clearday="+$('select[name="cleardate"]').val();
+                	cleardate = "&start="+startdate+"&end="+enddate;
+					window.location.href = '/customer/customer/history?cashpoolCode=<?php echo $cashpoolCode; ?>&'+cleardate+cleartype+"&clearday="+$('select[name="cleardate"]').val();
 						});
 
             $('.glyphicon-download-alt').click(function(){

@@ -549,9 +549,17 @@ class Customer extends MY_Controller {
             $end = date('Y-m-d',time());
         }
 
+        if( isset($isManual) && !empty($isManual) && $isManual == 0)
+        {
+            $isManual = 1;
+        }else{
+            $isManual = 0;
+        }
+
         $this->load->model('HistoryModel');
 
-        $result = $this->HistoryModel->getAwardInvoiceList($cashpoolCode, $start, $end, $clearday, $isManual);
+
+        $result = $this->HistoryModel->getAwardInvoiceList($cashpoolCode, $start, $end, $isManual);
 
         $amount = 0 ;
         $discount = 0;
@@ -562,10 +570,12 @@ class Customer extends MY_Controller {
         $avg_dpe = 0 ;
 
         $amount_a = 0 ;         //平台清算
+        $discount_a = 0;
         $avg_apr_a = 0 ;		//平台计算 平均年化收益率%
         $avg_discount_a = 0 ;	//平台计算 平均折扣率%
 
         $amount_m = 0 ;         //手工清算
+        $discount_m = 0;
         $avg_apr_m = 0 ;		//手工 平均年化收益率%
         $avg_discount_m = 0 ;	//手工 平均折扣率%
 
@@ -595,10 +605,11 @@ class Customer extends MY_Controller {
 
             if( $val['IsManual'] == 1){
                 $amount_m  += $val['PayAmount'];
-
+                $discount_m += $val['PayDiscount'];
 
             }else{
                 $amount_a  += $val['PayAmount'];
+                $discount_a += $val['PayDiscount'];
 
             }
 
@@ -606,11 +617,14 @@ class Customer extends MY_Controller {
 
         foreach ( $result as $val){
             $avg_discount += round( $val["PayDiscount"]/ $amount , 4);
+            $avg_apr += round($val['PayDiscount']/$val['PayDpe']*365*100/$amount, 2);
 
             if( $val['IsManual'] == 1){
                 $avg_discount_m  += round($val['PayAmount']/ $amount_m , 4);
+                $avg_apr_m += round($val['PayDiscount']/$val['PayDpe']*365*100/$amount_m, 2);
             }else{
                 $avg_discount_a  += round($val['PayAmount']/ $amount_a , 4);
+                $avg_apr_a += round($val['PayDiscount']/$val['PayDpe']*365*100/$amount_a, 2);
             }
         }
 
@@ -618,6 +632,8 @@ class Customer extends MY_Controller {
         $stat['TotalAmount_A'] =  $amount_a;
         $stat['TotalAmount_M'] =  $amount_m;
 
+        $stat['TotalDiscount_M']= $discount_m ;
+        $stat['TotalDiscount_A']= $discount_a ;
 
         $stat['InvoiceCount'] = count( $result);
         $stat['VendorCount'] = count($supplier);
@@ -641,7 +657,7 @@ class Customer extends MY_Controller {
 
         $this->data['panel'] = $stat;
 
-        $this->data['history'] = $this->HistoryModel->getDailyAwardList($cashpoolCode, $start, $end, $clearday, $isManual);
+        $this->data['history'] = $this->HistoryModel->getDailyAwardList($cashpoolCode, $start, $end,  $isManual);
 
         $this->data['cashpoolCode'] = $cashpoolCode;
         $this->data['cleartype'] = isset($clear_type)?$clear_type:-1;

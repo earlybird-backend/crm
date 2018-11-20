@@ -11,7 +11,7 @@ class HistoryModel extends CI_Model {
 
 
 
-    public function getAwardInvoiceList($cashpoolCode, $begindate = null , $enddate = null, $awarddate = null,  $isManual = null)
+    public function getAwardInvoiceList($cashpoolCode, $begindate = null , $enddate = null, $isManual = null)
     {
 
         $sql = "
@@ -27,10 +27,6 @@ class HistoryModel extends CI_Model {
               where CashpoolCode = '{$cashpoolCode}'
         ";
 
-        if( $awarddate != null){
-
-            $sql .= " and AwardDate = '{$awarddate}' ";
-        }else {
 
             if ($begindate != null) {
 
@@ -41,7 +37,7 @@ class HistoryModel extends CI_Model {
                 $sql .= " and AwardDate < '{$enddate}' ";
 
             }
-        }
+
 
         if( $isManual != null){
             $sql .= " and IsManual = '{$isManual}' ";
@@ -56,7 +52,7 @@ class HistoryModel extends CI_Model {
     }
 
      // Get category
-	public function getDailyAwardList( $cashpoolCode, $begindate = null , $enddate = null,$awarddate = null, $isManual = 0)
+	public function getDailyAwardList( $cashpoolCode, $begindate = null , $enddate = null, $isManual = 0)
     {
 
         $sql = "select Id,
@@ -70,11 +66,7 @@ class HistoryModel extends CI_Model {
               `AvgAPR`
               from `Customer_DailyAwards` where CashpoolCode = '{$cashpoolCode}'";
 
-        if( $awarddate != null){
 
-            $sql .= " and AwardDate = '{$awarddate}' ";
-
-        }else {
             if ($begindate != null) {
 
                 $sql .= " and AwardDate >= '{$begindate}' ";
@@ -85,7 +77,7 @@ class HistoryModel extends CI_Model {
 
             }
 
-        }
+
         if( $isManual != null){
             $sql .= " and AwardType = '{$isManual}'";
         }else{
