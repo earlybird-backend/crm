@@ -26,10 +26,10 @@ date_default_timezone_set("Asia/Shanghai");
 
 
 
-$config['base_url'] = 'http://master.eb-cf.com:1080/';
+$config['base_url'] = 'http://localhost:1080/';
 
 $config['lang_url'] = array(
-    'default' => 'http://master.eb-cf.com:1080/'
+    'default' => 'http://localhost:1080/'
 );
 
 /*

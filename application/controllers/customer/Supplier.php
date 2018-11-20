@@ -50,9 +50,6 @@ class Supplier extends MY_Controller {
 
         $this->checkLogin();
 
-        $this->load->library('phpmailer');
-
-
         $this->data['link'] = $this->current_controller;
 
         $this->load->model('SupplierModel');
@@ -76,42 +73,25 @@ class Supplier extends MY_Controller {
 
 
         $this->load->model('MarketModel');
+        $this->load->model('CompanyModel');
 
-
-        $markets = $this->Marketmodel->get_markets();
-
-
-        $sql = "SELECT 
-                p.CashpoolCode as cashpoolcode,				#市场编号Code 
-                p.createtime,								#市场创建时间
-                c.companyname as buyer,						#市场买家公司名称
-                p.CompanyDivision as division,				#市场子公司 DIVISION
-                p.currencyname as currency, 				#市场的使用的币别
-                p.currencysign as currencysign,				#市场的币别符号 
-                IFNULL(x.Cnt, 0) as SupplierCount			#市场供应商数
-                FROM   `Customer_Cashpool` p 																	#数据表为记录 买家 市场的设置
-                INNER JOIN `Base_Companys` c ON c.Id = p.CompanyId		
-                LEFT JOIN (
-                    SELECT CashpoolCode, COUNT(Id) Cnt FROM  `Customer_Suppliers` GROUP BY CashpoolCode
-                ) x ON x.CashpoolCode = p.CashpoolCode
-                WHERE p.MarketStatus >= 0
-                ORDER BY p.CreateTime";
-
-
-        $query = $this->db->query($sql);
-
+        $markets = $this->MarketModel->get_markets();
 
         $result = array();
 
         foreach( $markets as $key=>$market){
             $result[] = array(
-
+                'cashpoolcode'     => $key,				#市场编号Code
+                'createtime'       => $market['CreateTime'],								#市场创建时间
+                'buyer'             => $this->CompanyModel->getCompany($market['company_id'])["CompanyName"],						#市场买家公司名称
+                'division'         => $market['market_name'],				#市场子公司 DIVISION
+                'currency'         => $market['currency'], 				#市场的使用的币别
+                'currencysign'    => $market['currency_sign'],				#市场的币别符号
+                'vendorcount'     => count( $this->SupplierModel->getSuppliers( $key )) 			#市场供应商数
             );
         }
 
-
-
-        $this->data['markets'] = $rs;
+        $this->data['markets'] = $result;
         $this->data['title'] = 'Supplier Manager';
         $this->load->view('customer/supplier_market_list', $this->data);
     }

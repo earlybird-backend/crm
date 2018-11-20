@@ -33,7 +33,7 @@ class SupplierModel extends CI_Model {
                     v.Id, 
                     v.Supplier, 
                     v.Vendorcode,
-                    v.VendorStatus,                     
+                    v.VendorStatus                     
                     from  `Customer_Suppliers` v                     
                     where v.CashpoolCode = '{$cashpoolCode}'                    
                     ORDER BY v.`Id` DESC;

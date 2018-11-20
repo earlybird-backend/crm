@@ -32,8 +32,7 @@ class Auth extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->currentDate = mdate($this->datestring, time());
-        $this->currentDateTime = mdate($this->dateStringWithTime, time());
+
     }
 
     public function index() {
@@ -60,8 +59,10 @@ class Auth extends MY_Controller {
 
         $this->form_validation->set_rules($config);
 
+
         if ($this->form_validation->run() == FALSE) {
-           // $this->middle = 'auth/index';
+
+            // $this->middle = 'auth/index';
            // $this->load->view('auth/index');
         } else {
 

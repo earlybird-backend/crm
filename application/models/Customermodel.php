@@ -1,18 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class CustomerModel extends CI_Model {
-	
-	var $table = "site_users";
-	var $datestring = "%Y-%m-%d";
-	var $dateStringWithTime = "%Y-%m-%d %H:%i:%s";
-	var $currentDate = '';
-    var $currentDateTime = '';
-	
+
 	public function __construct()    {
         parent::__construct();		
-	    
-        $this->currentDate = mdate($this->datestring, time()) ;
-        $this->currentDateTime = mdate($this->dateStringWithTime, time()) ;	
+
+
+        $this->db = $this->load->database('cisco',true);
 		
     } 	
 	// Get category

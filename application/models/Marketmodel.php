@@ -8,8 +8,7 @@ class MarketModel extends CI_Model {
 	public function __construct()    {
         parent::__construct();
 
-        $this->db = $this->load->database('default', true);
-        $this->load->driver('cache');
+        $this->db = $this->load->database('cisco',true);
 
         #$this->profile = $this->cache->memcached->get('profile');
     }
@@ -23,6 +22,7 @@ class MarketModel extends CI_Model {
 
             $sql = "select 
               p.Id, 
+              p.CreateTime,
               p.CashpoolCode,    
               p.CompanyId,
               p.CompanyDivision , 
@@ -49,6 +49,7 @@ class MarketModel extends CI_Model {
             foreach( $rst as $item){
                 $result[$item["CashpoolCode"]] = array(
                     "id" => $item["Id"],
+                    "create_time" => date('Y-m-d H:i:s', strtotime($item['CreateTime'])),
                     "company_id" => $item["CompanyId"],
                     "market_name" => $item["CompanyDivision"],
                     "market_status" => $item["MarketStatus"],
@@ -80,6 +81,7 @@ class MarketModel extends CI_Model {
 
             $sql = "select 
               p.Id, 
+              p.CreateTime,
               p.CashpoolCode,    
               p.CompanyId,
               p.CompanyDivision , 
@@ -101,11 +103,13 @@ class MarketModel extends CI_Model {
             $query = $this->db->query($sql);
 
             $result = array();
-            $item = $query->row_array();
+            $item = $query->first_row('array');
 
 
             $result = array(
                 "id" => $item["Id"],
+                "create_time" => date('Y-m-d H:i:s', strtotime($item['CreateTime'])),
+                "cashpool_code" => $item['CashpoolCode'],
                 "company_id" => $item["CompanyId"],
                 "market_name" => $item["CompanyDivision"],
                 "market_status" => $item["MarketStatus"],
@@ -127,8 +131,6 @@ class MarketModel extends CI_Model {
     }
 
 
-
-
     public function get_service_time(){
 
         $result = array(); //$this->cache->memcached->get('service-time');
@@ -140,7 +142,7 @@ class MarketModel extends CI_Model {
 
             $query = $this->db->query($sql);
 
-            $result = $query->row_array();
+            $result = $query->first_row('array');
 
             //$this->cache->memcached->save( 'service-time', $result, 3600);
         }

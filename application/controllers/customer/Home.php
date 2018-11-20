@@ -54,16 +54,6 @@ class Home extends MY_Controller {
 
         $this->currentDateTime = mdate($this->dateStringWithTime, time());
 
-        $this->load->library('phpmailer');
-
-        $this->load->library('upload');        
-
-        $this->load->model('UploadsupplierModel');
-
-        $this->load->model('PlansModel');
-        $this->load->model('CurrencylistModel');
-		$this->load->model('ConfigurationModel');
-
 
         $this->data['link'] = $this->current_controller;
 
@@ -80,20 +70,6 @@ class Home extends MY_Controller {
         }
     }
 
-    public function setUserData() {
-
-        $columns = array('UserId' => $this->session->userdata('UserId'));
-
-        $table = 'site_users';
-
-        $result = $this->UniversalModel->getRecords($table, $columns);
-
-        $this->userdata = $result[0];
-
-        $this->userdata['Role'] = $this->session->userdata("Role");
-
-        $this->userdata = $this->session->userdata;
-    }
     //今日看板
     public function index() {
 
@@ -1012,66 +988,7 @@ class Home extends MY_Controller {
         $this->load->view('customer/market_detail', $this->data);
     }
     
-    public function market_detail_bak(){
-    
-        $UserId = $this->checkLogin();
-        
-        $TotalPayment = 0 ;
-        $NormalPayment = 0;
-        $AdjustPayment = 0 ;
-        
-        $CashPool = $this->get_current_cashpool($this->data['CompanyId'],$this->data['CurrencyId']);
-            
-            $sql = "SELECT distinct p.Id,supplier,p.Vendorcode,InvoiceNo,InvoiceAmount,EstPaydate
-            from `Customer_Payments` p
-            left join `Customer_Suppliers` s ON s.CustomerId=p.CustomerId AND s.Vendorcode=p.Vendorcode
-            where p.CustomerId = '{$this->data['CompanyId']}' AND p.CurrencyId = '{$this->data['CurrencyId']}'
-            AND p.InvoiceStatus = 1
-                Order By p.Vendorcode,p.EstPaydate;
-                    ";
-        
-            $handler = $this->db->query($sql);
-            $data = $handler->result_array();;
-            $list = array();
-        
-            foreach($data as $key => $v)
-            {
-                $list[] = array(
-                'id' => $v['Id'],
-                'num' => $key + 1,
-                'vendorcode' => $v['Vendorcode'],
-                'supplier' => $v['supplier'],
-                'invoiceno' => $v['InvoiceNo'],
-                'amount' => $v['InvoiceAmount'],
-                'paydate' => date('Y-m-d',strtotime($v['EstPaydate']))
-                    );
-        
-            $NormalPayment += $v['InvoiceAmount'] ;
-        
-            }
-        
-            $this->data['data'] = $list;
-        
-            $TotalPayment = $NormalPayment + $AdjustPayment; 
-            
-            $this->data['Payment'] = array(
-                'total' => $TotalPayment,
-                'normal' => $NormalPayment,
-                'adjust' => $AdjustPayment
-            
-            );    
 
-            
-        $this->data['CashPool'] = $CashPool;
-        $this->data['title'] = $CashPool['CurrencyName']." Market";
-        $this->data['pre_nav'] = array('title' => 'Open Markets', 'uri'=>'customer/markets') ;
-        $this->data['uri'] = "customer/market_detail/".$this->base64url_encode($this->data['CompanyId'])."/".$this->base64url_encode($this->data['CurrencyId']);
-        
-        $this->data['dis_companynav'] = true;
-         
-        $this->load->view('customer/market_detail', $this->data);
-        
-    }
     
     //查询买家的支付计划信息
     private function get_current_cashpool($CustomerId,$CurrencyId)
@@ -1305,126 +1222,7 @@ class Home extends MY_Controller {
         $this->load->view($this->data['uri'], $this->data);    
     }
     
-    
-    
-    public function ajax_set_schedule(){
-        
-        header('Content-type: text/json');
-        $exec_sql = array();
-        $result = array('ret' => 0 );
-        $where = "";
-        
-        $cashpoolId = $this->input->post('cashpool') ;
-        //指定给某供应商
-        $vendorcode = $this->input->post('vendorcode') ;
-        $data = $this->input->post('data');
 
-        if(isset($data) && is_array($data) && count($data) > 0 ){
-            
-            
-            $CashPool = $this->get_current_cashpool_byid($cashpoolId);
-            
-            //将数据存入清算数据表
-            $sql = "";         
-            $k = 0 ;            
-            foreach($data as $v){
-            
-                if($v['op_mark'] == 'add'){
-                    $sql .= "\n";
-                                    
-                    if($k != 0)
-                        $sql .= ",";
-                     
-                    $sql .= "(".
-                        "'".$this->session->userdata('EmailAddress')."',".
-                        "'".$CashPool['CustomerId']."',".
-                        "'".$CashPool['Id']."',".
-                        "'".(isset($vendorcode) ? $vendorcode : '')."',".
-                        "'".$v['paydate']."',".
-                        "'".$v['payamount']."',".
-                        "'".$v['payamount']."',".
-                        "'1'".
-                        ")";
-                    $k++;
-                }
-        
-             }        
-             
-            if(strlen($sql) > 0)
-            {
-                
-                $sql = "INSERT INTO `Customer_CashPool_PaySchedule`\n".
-                        "(`CreateUser`,`CustomerId`,`CashPoolId`,`PayToSupplier`,`PayDate`,`PayAmount`,`AvaAmount`,`PaymentStatus`)\n".
-                        "VALUES".$sql.";" ;
-                                                        
-                $exec_sql[] = $sql ;
-                  
-             if($this->db_commit($exec_sql)){
-                    $result = array('ret' => 1 );
-            }else{
-                $result = array('ret' => -1 , 'msg' => '更新数据异常');
-            }
-                
-            }
-        }
-        
-        echo json_encode($result);
-    }
-    
-    public function award_history(){
-    
-        $UserId = $this->checkLogin();
-        
-        $TotalPayment = 0 ;
-        $TotalDiscount = 0 ;
-        $CountInvoices = 0 ;
-        
-        $sql = "SELECT AwardDate,PayDate,s.supplier, s.Vendorcode, b.BidRate, sum(PayAmount) as PayAmount,sum(p.InvoiceAmount) as TotalAmount,count(p.id) as InvCount ,avg(a.Paydpe) as AverageDpe 
-                FROM `Customer_PayAwards` a
-                INNER JOIN `Customer_Payments` p ON p.Id = a.InvoiceId
-                INNER JOIN `Customer_Suppliers` s ON s.CustomerId = a.CustomerId AND s.Vendorcode = p.Vendorcode
-                INNER JOIN `Supplier_Bids` b ON b.Id = a.BidId
-                WHERE a.CustomerId = '{$this->data['CompanyId']}' AND a.CurrencyId = '{$this->data['CurrencyId']}'
-                group by AwardDate,PayDate,s.supplier,s.Vendorcode, b.BidRate
-                order by AwardDate DESC;                                       
-                ";               
-        $handler = $this->db->query($sql);
-        $data = $handler->result_array();
-        $list = array();
-        
-        foreach($data as $v)
-        {
-            $list[] = array(   
-                'AwardDate' => date('Y-m-d',strtotime($v['AwardDate'])),
-                'PayDate' => date('Y-m-d',strtotime($v['PayDate'])),
-                'supplier' => $v['supplier'],
-                'Vendorcode' => $v['Vendorcode'], 
-                'InvoiceCount' => $v['InvCount'],
-                'AverageDpe' => round($v['AverageDpe'],1),
-                'AverageApr' => $v['BidRate'],
-                'PayAmount' => $v['PayAmount'],
-                'TotalAmount' => $v['TotalAmount'],
-                'TotalDiscount' => $v['TotalAmount'] - $v['PayAmount']
-            );
-            
-            $TotalDiscount += $v['TotalAmount'] - $v['PayAmount'];
-            $TotalAmount += $v['TotalAmount'] ;
-            $CountInvoices += $v['InvCount'];
-            
-        }
-              
-        $this->data['data'] = $list;
-        
-        
-        $this->data['ClearAmount'] = $TotalAmount  ;
-        $this->data['TotalDiscount'] = $TotalDiscount ;
-        $this->data['CountInvoices'] = $CountInvoices ;
-        
-        $this->data['title'] = 'Award History';
-        $this->data['uri'] = 'customer/award_history';
-                 
-        $this->load->view($this->data['uri'], $this->data);
-    }
     
     public function suppliers_list(){
         
