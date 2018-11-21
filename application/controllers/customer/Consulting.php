@@ -92,13 +92,17 @@ class Consulting extends MY_Controller {
         
         $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
                 bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
-                bi.name as InterestName,ue.RequestComment from User_Enquiry as ue 
+                bi.name as InterestName,ue.RequestComment 
+                from User_Enquiry as ue 
                 inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
                 inner join Base_Region as br on br.Id = ue.RegionId
-                inner join Base_Interest as bi on bi.Id = ue.InterestId";
+                inner join Base_Interest as bi on bi.Id = ue.InterestId                 
+                ";
+
         $query = $this->db->query($sql);
         $rs = $query->result_array($query);
-        $this->data['rs']->$rs;
+
+        $this->data['rs'] = $rs;
         $this->data['title'] = 'Consulting';
         $this->load->view('customer/consulting', $this->data);
 
@@ -106,9 +110,12 @@ class Consulting extends MY_Controller {
 
     //处理咨询
     public function process(){
+
         $ids = $this->input->post('ids');
         $status = $this->input->post('status');
         $this->db = $this->load->database('cisco',true);
+
+
         $id_ar = explode(',',$ids);
         foreach($id_ar as $id){
             $tmp = array(

@@ -71,7 +71,6 @@ class User extends MY_Controller {
     //用户管理
     public function index() {
 
-        
         $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
                 bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
                 bi.name as InterestName,ue.RequestComment from User_Enquiry as ue 
