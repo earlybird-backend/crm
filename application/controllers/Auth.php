@@ -32,7 +32,8 @@ class Auth extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-
+        $this->currentDate = mdate($this->datestring, time());
+        $this->currentDateTime = mdate($this->dateStringWithTime, time());
     }
 
     public function index() {
@@ -94,6 +95,7 @@ class Auth extends MY_Controller {
                 //$columns['Online'] = '1';
                 $columns['LastLogin'] = $this->currentDateTime;
                 $where = 'UserId';
+
                 $this->UniversalModel->save($table, $columns, $where, $result[0]['UserId']);
 
                 $this->session->set_userdata('logged', TRUE);
@@ -121,6 +123,7 @@ class Auth extends MY_Controller {
                 //$this->checkLogin();
             }
         }
+
        //$this->load->view('auth/index');
        $this->load->view('auth/index', $this->data);
      
