@@ -10,7 +10,7 @@ class UserlistModel extends CI_Model {
 	
 	public function __construct()    {
         parent::__construct();		
-	$this->currentDate = mdate($this->datestring, time()) ;
+	    $this->currentDate = mdate($this->datestring, time()) ;
         $this->currentDateTime = mdate($this->dateStringWithTime, time()) ;	
 		
     } 	

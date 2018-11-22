@@ -281,7 +281,7 @@
                             <?php echo '供应商管理' ?>
                         </a>
                 </li>
-                <?php } ?>
+                
                 <li>
                     <?php if($link == 'customer/user') { ?>
                     <a class="active" href="javascript:;" >
@@ -291,6 +291,7 @@
                             <?php echo '用户管理' ?>
                         </a>
                 </li>
+                <?php } ?>
                 <li>
                     <?php if($link == 'customer/consulting') { ?>
                     <a class="active" href="javascript:;" >

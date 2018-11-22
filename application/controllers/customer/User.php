@@ -50,10 +50,10 @@ class User extends MY_Controller {
 
         $this->checkLogin();
 
-        $this->data['link'] = $this->current_controller;
-        $this->db = $this->load->database('cisco',true);
+        $this->data['link'] = $this->current_controller;        
 
         $this->db = $this->load->database('cisco',true);
+        $this->load->model('UserModel');
 					
     }
 
@@ -77,12 +77,14 @@ class User extends MY_Controller {
                 inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
                 inner join Base_Region as br on br.Id = ue.RegionId
                 inner join Base_Interest as bi on bi.Id = ue.InterestId";
+        
+        
         $query = $this->db->query($sql);
         $rs = $query->result_array($query);
         $this->data['rs']->$rs;
         $this->data['title'] = 'User';
 
-        $this->data['status'] =  $this->Usermodel->
+        //$this->data['status'] =  $this->UserModel->
 
         $this->load->view('customer/user_list', $this->data);
 

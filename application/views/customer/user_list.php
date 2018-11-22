@@ -59,7 +59,7 @@
                                         $status="已线下沟通";
                                         break;
                                     case 2:
-                                        $status="已经邀请注册";
+                                        $status="已邀请注册";
                                         break;
                                     case 3:
                                         $status="已经注册";
