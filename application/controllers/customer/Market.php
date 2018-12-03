@@ -54,15 +54,7 @@ class Market extends MY_Controller {
 
         $this->currentDateTime = mdate($this->dateStringWithTime, time());
 
-        $this->load->library('phpmailer');
-
-        $this->load->library('upload');
-
-        $this->load->model('UploadsupplierModel');
-
-        $this->load->model('PlansModel');
-        $this->load->model('CurrencylistModel');
-		$this->load->model('ConfigurationModel');
+        
         $this->load->model('InvoiceModel');
 
         $this->data['link'] = $this->current_controller;
@@ -109,7 +101,7 @@ class Market extends MY_Controller {
                     LEFT JOIN (
                         SELECT CashpoolCode, COUNT(Id) Cnt FROM  `Customer_Cashpool_Allocate` WHERE AllocateStatus in (0,1) GROUP BY CashpoolCode
                     ) x ON x.CashpoolCode = p.CashpoolCode
-                    WHERE p.MarketStatus >= 0 AND exists(
+                    WHERE p.MarketStatus = 1 AND exists(
                             SELECT InvoiceNo FROM `Customer_Payments` m WHERE m.CashpoolCode = p.CashpoolCode
                             AND m.InvoiceStatus = 1 AND m.IsIncluded = 1 AND m.EstPaydate > p.NextPaydate AND m.InvoiceAmount < p.AutoAmount
                         )                                        
