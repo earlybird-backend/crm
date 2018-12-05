@@ -254,13 +254,31 @@ class Home extends MY_Controller {
 
     private function get_offers($cashpoolId)
     {
-        $sql = "  select b.Vendorcode,b.BidRate,b.ResultRate,b.MinAmount,
+        /*$sql = "  select b.Vendorcode,b.BidRate,b.ResultRate,b.MinAmount,
                     CASE WHEN IFNULL(q.CreateTime,'".date("Y-m-d", time())."') < '".date("Y-m-d", time())."' THEN '".date("Y-m-d", time())."' ELSE q.CreateTime END as CreateTime
-                from Supplier_Bids b
+                from 
+                 Supplier_Bids b
                 left join Supplier_Bid_Queue q on q.Id = b.QueueId
                 where b.CashpoolId = '{$cashpoolId}'
-                and b.BidStatus >= 0 and b.BidRate > 0";
+                and b.BidStatus >= 0 and b.BidRate > 0";*/
 
+        $sql = "select 
+                b.Vendorcode -- 供应商ID
+                ,b.BidRate -- 开价APR
+                ,b.ResultRate -- 获得APR
+                ,b.MinAmount -- 最小成交金额
+                ,CASE WHEN IFNULL(q.CreateTime,'2018-12-04') < '2018-12-04' 
+                THEN '2018-12-04' ELSE q.CreateTime END as CreateTime -- 开价时间
+                ,IFNULL(a.PayDiscount,0) as discount -- 折扣金额
+                ,IFNULL(a.PayAmount,0) as clear -- 清算应收
+                ,IFNULL(a.NoPayAmount,0) as noclear -- 未清算应收
+                ,IFNULL(a.Supplier,'') as Supplier
+                ,CashpoolStatus -- 对于供应商 (当前市场的状态 0 : 未参与市场 1 : 正常竞价 2 : 无可用发票)
+                from 
+                Supplier_Bids b
+                left join stat_current_cashpools_vendors a on a.Vendorcode=b.Vendorcode and a.CashpoolId = b.CashpoolId 
+                left join Supplier_Bid_Queue q on q.Id = b.QueueId
+                where b.CashpoolId = '{$cashpoolId}'";
         $db = $this->load->database('bird',true);
         $query = $db->query($sql);
         $result = $query->result_array();
@@ -270,13 +288,15 @@ class Home extends MY_Controller {
         foreach ( $result as $val){
             $offers[$val["Vendorcode"]] = array(
                 "total" => 0,
-                "discount" => 0,
-                "clear" => 0 ,
-                "noclear" => 0,
+                "discount" => floatval($val["discount"]),
+                "clear" => floatval($val["clear"]) ,
+                "noclear" => floatval($val["noclear"]) ,
                 "offerAPR" => $val["BidRate"],
                 "getAPR" => $val["ResultRate"],
                 "minPaid" => floatval($val["MinAmount"]),
-                "offerTime" => $val["CreateTime"]
+                "offerTime" => $val["CreateTime"],
+                "Supplier" => $val["Supplier"],
+                "CashpoolStatusForSupplier"=> intval($val["CashpoolStatus"])
             );
         }
 
@@ -330,9 +350,100 @@ class Home extends MY_Controller {
 
         return $suppliers;
     }
-
     public function market_current(){
+        /*$sql = 'select
 
+                from stat_current_cashpools';*/
+        $cashpoolCode = $this->input->get('id');
+        $sql = "select 
+                    a.CashpoolId,-- 市场Id
+                    a.CashpoolCode,-- 市场编号
+                    a.CashpoolName,-- 公司名称
+                    a.Currency,-- 市场关联币别
+                    a.CurrencySign,-- 市场关联币别标识
+                    b.NextPaydate,-- 下一次支付日期
+                    b.ExpectAPR,-- 期望年化率
+                    b.MiniAPR,-- 成本年化率
+                    a.CompanyName,-- 市场所属的公司名称
+                    a.AllocateCash, -- 计划资金分配金额
+                    a.ValidCash, -- 可用资金
+                    b.PaymentType,-- 支付周期类型（年，月，日，周等）
+                    b.PaymentDay, -- 周期数量
+                    
+                    (a.PayDiscount + a.NoPayDiscount) as totalDiscount, -- 市场总值
+                    a.ValidAmount, -- (市场总值)应付
+                    -- (市场总值)年化率(暂时没有)
+                    a.ValidAvgDpe,-- (市场总值)提前天数
+                    
+                    a.PayDiscount,-- 清算总值
+                    a.PayAmount,-- (清算总值)应付
+                    a.AvgAPR,-- (清算总值)年化率
+                    a.AvgDpe,-- (清算总值)提前天数
+                    
+                    a.NoPayDiscount, -- 未清算总值
+                    a.NoPayAmount,-- (未清算总值)应付
+                    a.NoAvgAPR,-- (未清算总值)年化率
+                    a.NoAvgDpe -- (未清算总值)提前天数
+                     from stat_current_cashpools a
+                    INNER JOIN Customer_Cashpool b ON a.CashpoolCode=b.CashpoolCode 
+                    where a.CashpoolCode = '$cashpoolCode' LIMIT 1";
+        $db = $this->load->database('bird',true);
+        $query = $db->query($sql);
+        $result = $query->row_array();
+        $cashpoolId = $result["CashpoolId"];
+        $offers = $this->get_offers( $cashpoolId);
+        $this->data['list'] = $offers;
+        $market = array();
+        $market["Id"] = $result["CashpoolId"];
+        $market["CashpoolCode"] = $result["CashpoolCode"];
+        $market["CompanyName"] = $result["CompanyName"];
+        $market["CompanyDivision"] = $result["CashpoolName"];
+        $market["CurrencySign"] = $result["CurrencySign"];
+        $market["CurrencyName"] = $result["CurrencyName"];
+        $market["CurrencyName"] = $result["Currency"];
+        $market["NextPaydate"] = $result["NextPaydate"];
+        $market["AvailableAmount"] = $result["AllocateCash"];
+        $market["AutoAmount"] = $result["ValidCash"];
+        $market["MiniAPR"] = $result["MiniAPR"];
+        $market["ExpectAPR"] = $result["ExpectAPR"];
+        $market["PaymentType"] = $result["PaymentType"];
+        $market["PaymentDay"] = $result["PaymentDay"];
+        $ServiceDate = $db->query("select ServiceDate from Customer_Cashpool_Service where ServiceStatus = 1;")
+            ->row_array()["ServiceDate"];
+        $market["ServiceDate"] = $ServiceDate;
+        $this->data['market'] = $market;
+
+        $stat = array();
+        $stat["currencySign"] = $result["CurrencySign"];
+        $total = array();
+        $total["paid"] = floatval($result["ValidAmount"]);
+        $total["discount"] = floatval($result["totalDiscount"]);
+        $total["dpe"] = floatval($result["ValidAvgDpe"]);
+        $total["apr"] = 0.00;//目前方法统计
+        $stat["total"] = $total;
+        $clear = array();
+        $clear["paid"] = floatval($result["PayAmount"]);
+        $clear["discount"] = floatval($result["PayDiscount"]);
+        $clear["dpe"] = floatval($result["AvgDpe"]);
+        $clear["apr"] = floatval($result["AvgAPR"]);
+        $clear["list"] = array();//这里未填充数据
+        $stat["clear"] = $clear;
+        $noclear = array();//之前是使用它计算dpe，现在直接获取不需要这个列表
+        $noclear["paid"] = floatval($result["NoPayAmount"]);
+        $noclear["discount"] = floatval($result["NoPayDiscount"]);
+        $noclear["dpe"] = floatval($result["NoAvgDpe"]);
+        $noclear["apr"] = floatval($result["NoAvgAPR"]);
+        $noclear["list"] = array();//之前是使用它计算dpe，现在直接获取不需要这个列表
+        $stat["noclear"] = $noclear;
+        $this->data['stat'] = $stat;
+        $this->data['title'] = '实时市场 ';
+        $this->data['pre_nav'] = array('title' => 'Dashboard', 'uri'=> $this->current_controller) ;
+        $this->load->view('customer/market_current', $this->data);
+        //echo json_encode($this->data);
+        //exit;
+    }
+    /*public function market_current(){
+        //echo json_encode($this->data);
         $cashpoolCode = $this->input->get('id');
 
         $market = $this->get_market($cashpoolCode);
@@ -372,15 +483,16 @@ class Home extends MY_Controller {
 
 
 
-        foreach ($offers as $key => &$item) {
-
-            $item["supplier"] = $suppliers[$key];
-
-            foreach ($invoices as $inv) {
 
                 if ($key == $inv["Vendorcode"]) {
+                    foreach ($offers as $key => &$item) {
 
-                    $total["dpe"] += $inv["Dpe"];
+                    $item["supplier"] = $suppliers[$key];
+
+                    foreach ($invoices as $inv) {
+
+
+                        $total["dpe"] += $inv["Dpe"];
 
                     if (isset( $awards[$inv["Id"]])) {
 
@@ -445,8 +557,9 @@ class Home extends MY_Controller {
 
         $this->data['title'] = '实时市场 ';
         $this->data['pre_nav'] = array('title' => 'Dashboard', 'uri'=> $this->current_controller) ;
+        //echo json_encode($this->data);
         $this->load->view('customer/market_current', $this->data);
-    }
+    }*/
 
     public function profile() {
 

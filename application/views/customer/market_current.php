@@ -134,6 +134,7 @@ $paymentType = array("month" => "月付","week" => "周付", "day" => "次日付
                         <th style="text-align: center;width:140px;"><span>序号</span></th>
                         <th style="text-align: center;width:140px;"><span>供应商</span></th>
                         <th style="text-align: center;"><span>供应商ID</span></th>
+                        <th style="text-align: center;"><span>市场状态</span></th>
                         <th style="text-align: center;"><span>开价时间</span></th>
                         <th style="text-align: center;"><span>开价APR</span></th>
                         <th style="text-align: center;"><span>获得APR</span></th>
@@ -155,8 +156,14 @@ $paymentType = array("month" => "月付","week" => "周付", "day" => "次日付
                             <tr>
 
                                 <td style="text-align: center;width: 100px;"><?php echo $key  ; ?></td>
-                                <td style="text-align: center;width: 100px;"><?php echo $v['supplier']; ?></td>
+                                <td style="text-align: center;width: 100px;"><?php echo $v['Supplier']; ?></td>
                                 <td style="text-align: center;width: 100px;"><?php echo $i; ?></td>
+                                <td style="text-align: center;width: 100px;">
+                                    <?php
+                                    echo $v['CashpoolStatusForSupplier']==1?'正常竞价':
+                                        $v['CashpoolStatusForSupplier']==2?'无可用发票':'未参与市场';
+                                    ?>
+                                </td>
                                 <td style="text-align: center;width: 100px;"><?php echo $v['offerTime']; ?></td>
                                 <td style="text-align: center;width: 100px;"><?php echo $v['offerAPR']; ?>%</td>
                                 <td style="text-align: center;width: 100px;"><?php echo $v['getAPR']; ?>%</td>
