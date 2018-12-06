@@ -69,9 +69,31 @@ class Home extends MY_Controller {
             
         }
     }
-
-    //今日看板
     public function index() {
+        $this->data['title'] = 'Dashboard';
+        $db = $this->load->database('bird',true);
+        $sql = "select CashpoolCode,-- 市场编号
+                    Currency,-- 市场关联币别
+                    CashpoolName,-- 市场名称/公司名称
+                    CashpoolStatus,-- 市场状态
+                    AllocateCash,-- 计划资金
+                    AllocateDate,-- 启用日期
+                    ValidAmount,-- 可用资金
+                    TotalAmount, -- 有效的应付发票(总金额)
+                    TotalInvoiceCount,-- 有效的应付发票(发票数量)
+                    0.0,-- 已清算发票(总金额)
+                    0.0, -- 已清算发票(总数量)
+                    EstPaydate,-- 下一个早付日期
+                    PayAmount, -- 当前可清算发票总金额
+                    PayDiscount, -- 折扣金额
+                    AvgAPR -- 平均年化率
+                    from stat_current_cashpools";
+        $markets = $db->query($sql)->result_array();
+        $this->data['markets'] = $markets;
+        $this->load->view('customer/dashboard2018', $this->data);
+    }
+    //今日看板
+    /*public function index1() {
 
         $this->data['title'] = 'Dashboard';
 
@@ -196,7 +218,7 @@ class Home extends MY_Controller {
         $rs = $handler->result_array();
         $this->data['logs'] = $rs;
         $this->load->view('customer/activity_log', $this->data);
-    }
+    }*/
 
 
     private function get_invoice($cashpoolCode, $paydate)
