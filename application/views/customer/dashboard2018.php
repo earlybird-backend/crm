@@ -235,7 +235,7 @@
         <tr>
             <th style="width: 50px">序号</th>
             <th style="width:240px;">公司名称</th>
-            <th>市场状态</th>
+            <th style="width:60px;">市场状态</th>
             <th>&sdot;可用资金<br>&sdot;启用日期</th>
             <th style="width: 200px;">
                 <div style="width: 200px">
