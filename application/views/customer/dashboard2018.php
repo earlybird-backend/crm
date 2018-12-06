@@ -245,7 +245,7 @@
                     </div>
                 </div>
             </th>
-            <th>下个早付日期</th>
+            <th style="width: 75px">下个早付日期</th>
             <th style="width: 200px;">当前可清算发票<br>(总金额/折扣金额/平均年化率)</th>
         </tr>
         </thead>
