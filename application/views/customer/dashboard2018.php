@@ -255,7 +255,7 @@
         $i = 1;
         foreach ($markets as $market)
         {?>
-        <tr>
+        <tr style="cursor: pointer;" onclick="location.href='/customer/home/market_current?id=<?php echo $market["CashpoolCode"]?>';">
             <td><?php echo $i++ ?></td>
             <td><?php echo $market['CashpoolName']."({$market['Currency']})" ?></td>
             <td>
