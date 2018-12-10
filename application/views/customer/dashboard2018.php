@@ -108,40 +108,130 @@
     <div class="row boand" style="margin-top:20px">
         <div class="col-md-3 dashboard_top_biao" style="background-image:url(/assets/img/dashboardImg/top_1_1.jpg);">
             <div class="txtdiv">
-                <div class="row txtdivb"> 23232323 </div>
+                <div class="row txtdivb"><?php echo $statistics["suppliersCount"]?></div>
                 <div class="row txtdivb1">
-                    总用户数
+                    供应商注册数统计
                 </div>
             </div>
         </div>
         <div class="col-md-3 dashboard_top_biao" style="background-image:url(/assets/img/dashboardImg/top_1_2.jpg);">
             <div class="txtdiv">
-                <div class="row txtdivb"> 23232323 </div>
+                <div class="row txtdivb"> <?php echo $statistics["cashpoolCount"]?> </div>
                 <div class="row txtdivb1">
-                    总访问数
+                    市场总数
                 </div>
             </div>
         </div>
         <div class="col-md-3 dashboard_top_biao" style="background-image:url(/assets/img/dashboardImg/top_1_3.jpg);">
             <div class="txtdiv">
                 <div class="row txtdivb">
-                    23232323
+                    <?php echo $statistics["invoiceCount"]?>
                 </div>
-                <div class="row txtdivb1"> 总发票数 </div>
+                <div class="row txtdivb1"> 已清算发票数量 </div>
             </div>
         </div>
         <div class="col-md-3 dashboard_top_biao" style="background-image:url(/assets/img/dashboardImg/top_1_4.jpg);">
             <div class="txtdiv">
-                <div class="row txtdivb">23232323</div>
-                <div class="row txtdivb1"> 总金额 </div>
+                <div class="row txtdivb"><?php echo $statistics["noRegSuppliersCount"]?></div>
+                <div class="row txtdivb1"> 供应商未注册数统计 </div>
             </div>
         </div>
     </div>
     <!--小看板-->
     <!--线图-->
-    <div class="row boand" style="width:95%;background-color:#98eed4;margin-top: 15px;height: 200px;">
-        &nbsp;
+    <div  class="row boand" style="width:1130px;margin-top: 15px;height: 400px;overflow: hidden">
+        <div id="lineGraph" class="row boand" style="width:1250px;margin-top: 15px;height: 350px;margin-left:-60px;">
+        </div>
     </div>
+    <script language="JavaScript" src="/assets/js/echarts.min.js"></script>
+    <script language="JavaScript">
+        var myChart = echarts.init(document.getElementById('lineGraph'));
+        option = {
+            title : {
+                text: '',
+                subtext: ''
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['成交数','发票数']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : [<?php
+                        $comm = "";
+                        foreach ($dayStatistics['date'] as $v)
+                        {
+                            echo "$comm'$v'";
+                            $comm = ",";
+                        }
+                        ?>]
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'成交数',
+                    type:'line',
+                    smooth:true,
+                    itemStyle: {normal: {areaStyle: {type: 'default',color: '#7efaff'},
+                        lineStyle: {
+                            width: 1,
+                            color: '#49979a'}}},
+                    emphasis: {
+                        color: '#7efaff'
+                    },
+                    data:[<?php
+                        $comm = "";
+                        foreach ($dayStatistics['value1'] as $v)
+                        {
+                            echo "$comm$v";
+                            $comm = ",";
+                        }
+                        ?>]
+                },
+                {
+                    name:'发票数',
+                    type:'line',
+                    smooth:true,
+                    itemStyle: {normal: {areaStyle: {type: 'default',color: '#98b2ee'},
+                        lineStyle: {
+                            width: 1,
+                            color: '#505d7c'}}},
+                    emphasis: {
+                        color: '#98b2ee'
+                    },
+                    data:[<?php
+                        $comm = "";
+                        foreach ($dayStatistics['value2'] as $v)
+                        {
+                            echo "$comm$v";
+                            $comm = ",";
+                        }
+                        ?>]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    </script>
     <!--线图-->
     <!--看板-->
     <div class="row boand" style="margin-top:15px">

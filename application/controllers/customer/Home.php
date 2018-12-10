@@ -90,7 +90,146 @@ class Home extends MY_Controller {
                     from stat_current_cashpools";
         $markets = $db->query($sql)->result_array();
         $this->data['markets'] = $markets;
+        $sql = "select 
+                    -- 供应商注册数统计
+                    (select COUNT(1) from Customer_Suppliers where Id in (select SupplierId from Customer_Suppliers_Users where UserStatus>0)) as suppliersCount
+                    -- 市场总数
+                    ,(select COUNT(1) from Customer_Cashpool where MarketStatus>=0) as cashpoolCount
+                    -- 已清算发票数量
+                    ,(select IFNULL(SUM(InvoiceCount),0) from Customer_DailyAwards) as invoiceCount
+                    -- 供应商未注册数统计
+                    ,(SELECT COUNT(1) FROM	Customer_Suppliers WHERE NOT Id IN (SELECT SupplierId FROM Customer_Suppliers_Users WHERE UserStatus > 0) and Vendorcode in (select Vendorcode from Customer_Payments where InvoiceStatus=1)) as noRegSuppliersCount";
+      $statistics = $db->query($sql)->row_array();
+      $this->data['statistics'] = $statistics;
+        $sqltemp = "";
+        $union = "";
+        for($i=0;$i<90;$i++)
+        {
+            $sqltemp = "$sqltemp
+                        $union
+                        select 0 as invoiceCount,0 as validInvoiceCount,DATE_FORMAT(date_add(NOW(), interval -$i day),'%Y-%m-%d') awardDate,$i as distanceDay";
+            $union = "union";
+        }
+        $sql = "select *
+                    ,(TO_DAYS(NOW())-TO_DAYS(awardDate)) as distanceDay -- 相距今天天数
+                     from 
+                    ((SELECT
+                        SUM(IFNULL(InvoiceCount, 0)) AS invoiceCount,-- 清算发票数
+                        SUM(IFNULL(ValidInvoiceCount, 0)) AS validInvoiceCount,-- 可清算的发票数
+                        AwardDate as awardDate
+                    FROM
+                        Customer_DailyAwards
+                    WHERE
+                      AwardDate is not null  and DATE_ADD(AwardDate, INTERVAL 90 DAY) >= NOW() GROUP BY AwardDate) a
+                      )
+                      $union
+                      $sqltemp";
+        $sql = "SELECT
+                SUM(invoiceCount) AS invoiceCount,
+                SUM(validInvoiceCount) AS validInvoiceCount,
+                DATE_FORMAT(MAX(awardDate),'%m-%d') as MaxAwardDate,
+				DATE_FORMAT(MIN(awardDate),'%m-%d') as MinAwardDate,
+                (distanceDay DIV 5) AS dkey
+                FROM
+                ($sql) aaa
+               GROUP BY
+               dkey
+               ORDER BY MinAwardDate DESC";
+        $dayStatistics = $db->query($sql)->result_array();//90天的数据统计，以10天为统计单位
+        foreach ($dayStatistics as $v)
+        {
+            $dayDate[] = $v["MaxAwardDate"];
+            $day90Statistics1[] = $v["invoiceCount"];
+            $day90Statistics2[] = $v["validInvoiceCount"];
+        }
+        $this->data["dayStatistics"]['date'] = $dayDate;
+        $this->data["dayStatistics"]['value1'] = $day90Statistics1;
+        $this->data["dayStatistics"]['value2'] = $day90Statistics2;
         $this->load->view('customer/dashboard2018', $this->data);
+     /*$day90Statistics = $db->query($sql)->result_array();
+        $day90Statistics1 = array();
+        $day90Statistics2 = array();
+        $day90date = array();
+        $distanceDay = -1;
+        $cAwardDate = date("Y-m-d");
+        $day90Statistics1Count = 0;
+        $day90Statistics2Count = 0;
+        $nm = 10;
+        $nmTemp = $nm;
+        foreach ($day90Statistics as $v)
+        {
+            $distanceDayTemp = $distanceDay;
+            $cAwardDate = $v["awardDate"];
+            $distanceDay = intval($v["distanceDay"]);
+            //今天
+            if($distanceDay == 0)
+            {
+                $day90date[] = date("Y-m-d", strtotime($v["awardDate"]));
+                $day90Statistics1[] = number_format($v["invoiceCount"],2);
+                $day90Statistics2[] = number_format($v["validInvoiceCount"],2);
+                continue;
+            }
+            else if($distanceDayTemp == -1)
+            {
+                $day90date[] = date("Y-m-d", strtotime("+$distanceDay day", strtotime($v["awardDate"])));
+                $day90Statistics1[] = number_format(0,2);
+                $day90Statistics2[] = number_format(0,2);
+            }
+            //====
+            if($distanceDayTemp == -1)
+            {
+                $n = $distanceDay-1;
+            }
+            else
+            {
+                $n = $distanceDay - $distanceDayTemp-1;
+            }
+            while($n>0)
+            {
+                --$nmTemp;
+                if($nmTemp<=0) {
+                    $day90date[] = date("Y-m-d", strtotime("+$n day", strtotime($v["awardDate"])));
+                    $day90Statistics1[] = number_format($day90Statistics1Count,2);
+                    $day90Statistics2[] = number_format($day90Statistics2Count,2);
+                    $day90Statistics1Count = 0;
+                    $day90Statistics2Count = 0;
+                    $nmTemp = $nm;
+                }
+                --$n;
+            }
+            --$nmTemp;
+            $day90Statistics1Count += floatval($v["invoiceCount"]);
+            $day90Statistics2Count += floatval($v["validInvoiceCount"]);
+            if($nmTemp<=0) {
+                $day90date[] = $v["awardDate"];
+                $day90Statistics1[] = number_format($day90Statistics1Count,2);
+                $day90Statistics2[] = number_format($day90Statistics2Count,2);
+                $nmTemp = $nm;
+                $day90Statistics1Count = 0;
+                $day90Statistics2Count = 0;
+            }
+        }
+        $n = 90 - $distanceDay;
+        $nn = 1;
+        while($n>=0)
+        {
+            --$nmTemp;
+            if($nmTemp<=0) {
+                $day90date[] = date("Y-m-d", strtotime("-$nn day", strtotime($cAwardDate)));
+                $day90Statistics1[] = number_format($day90Statistics1Count,2);
+                $day90Statistics2[] = number_format($day90Statistics2Count,2);
+                $nmTemp = $nm;
+                $day90Statistics1Count = 0;
+                $day90Statistics2Count = 0;
+            }
+            --$n;
+            $nn++;
+        }
+        $this->data["day90Statistics"]['date'] = $day90date;
+        $this->data["day90Statistics"]['value1'] = $day90Statistics1;
+        $this->data["day90Statistics"]['value2'] = $day90Statistics2;*/
+
+
     }
     //今日看板
     /*public function index1() {
