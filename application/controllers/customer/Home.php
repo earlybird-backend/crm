@@ -129,7 +129,7 @@ class Home extends MY_Controller {
                 SUM(validInvoiceCount) AS validInvoiceCount,
                 DATE_FORMAT(MAX(awardDate),'%m-%d') as MaxAwardDate,
 				DATE_FORMAT(MIN(awardDate),'%m-%d') as MinAwardDate,
-                (distanceDay DIV 5) AS dkey
+                (distanceDay DIV 1) AS dkey
                 FROM
                 ($sql) aaa
                GROUP BY

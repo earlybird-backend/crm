@@ -16,6 +16,18 @@
 		padding: 2px 5px;
 		margin: 5px;
 	}
+    #myTable .split1 {
+
+        border-bottom:1px solid #b1b1b1;
+    }
+    #myTable .split2:before
+    {
+        content:" / ";
+    }
+    #myTable th {
+        font-size: 12px;
+        text-align: center;
+    }
 </style>
 
 <div class="clearing-status">
@@ -37,23 +49,54 @@
                 </div>
             </div>
         </div>
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li class="<?php echo $allConsulting;?>" role="presentation">
+                <a href="/customer/consulting/allConsulting" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">全部</a>
+            </li>
+            <li class="<?php echo $newRegister;?>" role="presentation">
+                <a href="/customer/consulting" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">新申请</a>
+            </li>
+            <li class="<?php echo $alreadyCommunicated;?>" role="presentation">
+                <a href="/customer/consulting/alreadyCommunicated" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已线下沟通</a>
+            </li>
+            <li class="<?php echo $alreadyRegister;?>" role="presentation">
+                <a href="/customer/consulting/alreadyRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经邀请注册</a>
+            </li>
+            <li class="<?php echo $alreadyInviteRegister;?>" role="presentation">
+                <a href="/customer/consulting/alreadyInviteRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经注册</a>
+            </li>
+        </ul>
 				<div class="graph-body">
                   <div class="table-body" style="padding:25px;">  		
                       <table id="myTable" class="display" cellspacing="0">
                       <thead>
                            <tr>
-                                <th style="text-align: center;"><span>标记</span></th>
-                                <th style="text-align: center;width:140px;"><span>处理状态</span></th>
-                                <th style="text-align: center;width:140px;"><span>提交时间</span></th>
-                                <th style="text-align: center;"><span>名</span></th>
-                                <th style="text-align: center;"><span>姓</span></th>
-                                <th style="text-align: center;"><span>公司</span></th>
-                                <th style="text-align: center;"><span>角色</span></th>
-                                <th style="text-align: center;"><span>邮箱</span></th>
-                                <th style="text-align: center;"><span>电话</span></th>
-                                <th style="text-align: center;"><span>区域</span></th>
-                                <th style="text-align: center;"><span>意向</span></th>
-                                <th style="text-align: center;"><span>备注</span></th>
+                                <th style="text-align: center;"><span></span></th>
+                                <th style="text-align: center;width:70px;"><span>状态</span></th>
+                                <th style="text-align: center;width: 210px;">
+                                    <div style="width: 200px;margin-left: 10px;">
+                                        <div style="margin: 0 auto;text-align: left">
+                                            <span>&sdot;公司名称<br>&sdot;名 / 姓/ 所属角色</span>
+                                         </div>
+                                     </div>
+                                </th>
+                                <th style="text-align: center;width: 160px;">
+                                    <div style="width: 150px;margin-left: 10px;">
+                                        <div style="margin: 0 auto;text-align: left">
+                                            <span>&sdot;电子邮箱<br>&sdot;联系电话</span>
+                                        </div>
+                                     </div>
+                                </th>
+                                <th style="text-align: center;width:160px;">
+                                    <div style="width: 150px;margin-left: 10px;">
+                                        <div style="margin: 0 auto;text-align: left">
+                                            <span>&sdot;所属区域<br>&sdot;提交时间</span>
+                                        </div>
+                                     </div>
+                                </th>
+                               <th style="text-align: center;"><span>意向</span></th>
+                               <th>&nbsp;</th>
+                                <!--<th style="text-align: center;"><span>备注</span></th>-->
                             </tr>
                       </thead>
                       
@@ -79,16 +122,40 @@
 													<tr>
 														<td><input type="checkbox" value="<?php echo $item['Id'] ?>" /></td>
 														<td><?php echo $status ?></td>
-														<td><?php echo $item['CreateTime'] ?></td>
-														<td><?php echo $item['FirstName'] ?></td>
-														<td><?php echo $item['LastName'] ?></td>
-														<td><?php echo $item['CompanyName'] ?></td>
-														<td><?php echo $item['RoleName'] ?></td>
-														<td><?php echo $item['ContactEmail'] ?></td>
-														<td><?php echo $item['ContactPhone'] ?></td>
-														<td><?php echo $item['RegionName'] ?></td>
-														<td><?php echo $item['InterestName'] ?></td>
-														<td><?php echo $item['RequestComment'] ?></td>
+														<td>
+                                                            <div style="width: 200px;margin-left: 10px;">
+                                                                <div style="margin: 0 auto;text-align: left">
+                                                                    <span class="split1"><?php echo $item['CompanyName'] ?></span>
+                                                                    <br>
+                                                                    <span class="split1"><?php echo $item['FirstName'] ?></span>
+                                                                    <span class="split2"></span>
+                                                                    <span class="split1"><?php echo $item['LastName'] ?></span>
+                                                                    <span class="split2"></span>
+                                                                    <span class="split1"><?php echo $item['RoleName'] ?></span>
+                                                                 </div>
+                                                            </div>
+                                                        </td>
+														<td>
+                                                            <div style="width: 150px;margin-left: 10px;">
+                                                                <div style="margin: 0 auto;text-align: left">
+                                                            <span class="split1"><?php echo $item['ContactEmail'] ?></span>
+                                                            <br>
+                                                            <span class="split1"><?php echo $item['ContactPhone'] ?></span>
+                                                                    </div>
+                                                                </div>
+                                                        </td>
+                                                        <td>
+                                                            <div style="width: 150px;margin-left: 10px;">
+                                                                <div style="margin: 0 auto;text-align: left">
+                                                            <span class="split1"><?php echo $item['RegionName'] ?></span>
+                                                            <br>
+                                                            <span class="split1"><?php echo $item['CreateTime'] ?></span>
+                                                                    </div>
+                                                                </div>
+                                                        </td>
+                                                        <td><?php echo $item['InterestName'] ?></td>
+														<!--<td><?php echo $item['RequestComment'] ?></td>-->
+                                                        <td><button type="button" class="btn btn-info">更多...</button></td>
 													</tr>
 													<?php endforeach ?>
                       </tbody>                                     

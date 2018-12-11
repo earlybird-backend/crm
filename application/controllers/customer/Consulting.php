@@ -88,15 +88,20 @@ class Consulting extends MY_Controller {
     }
     //咨询页
     public function index() {
-
-        
+        $this->data["newRegister"] = "active";
+        self::ConsultingList(0);
+    }
+    private function ConsultingList($activateStatus)
+    {
+        $where = $activateStatus>=0?" where ActivateStatus=$activateStatus":"";
         $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
                 bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
                 bi.name as InterestName,ue.RequestComment 
                 from User_Enquiry as ue 
                 inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
                 inner join Base_Region as br on br.Id = ue.RegionId
-                inner join Base_Interest as bi on bi.Id = ue.InterestId                 
+                inner join Base_Interest as bi on bi.Id = ue.InterestId  
+                $where
                 ";
 
         $query = $this->db->query($sql);
@@ -105,9 +110,31 @@ class Consulting extends MY_Controller {
         $this->data['rs'] = $rs;
         $this->data['title'] = 'Consulting';
         $this->load->view('customer/consulting', $this->data);
-
     }
-
+    public function allConsulting()
+    {
+        $this->data["allConsulting"] = "active";
+        self::ConsultingList(-1);
+    }
+    public function newRegister()
+    {
+        self::index();
+    }
+    public function alreadyCommunicated()
+    {
+        $this->data["alreadyCommunicated"] = "active";
+        self::ConsultingList(1);
+    }
+    public function alreadyRegister()
+    {
+        $this->data["alreadyRegister"] = "active";
+        self::ConsultingList(2);
+    }
+    public function alreadyInviteRegister()
+    {
+        $this->data["alreadyInviteRegister"] = "active";
+        self::ConsultingList(3);
+    }
     //处理咨询
     public function process(){
 
