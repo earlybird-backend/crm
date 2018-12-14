@@ -71,17 +71,28 @@ class User extends MY_Controller {
     //用户管理
     public function index() {
 
-        $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
+        /*$sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
                 bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
                 bi.name as InterestName,ue.RequestComment from User_Enquiry as ue 
                 inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
                 inner join Base_Region as br on br.Id = ue.RegionId
-                inner join Base_Interest as bi on bi.Id = ue.InterestId";
-        
-        
+                inner join Base_Interest as bi on bi.Id = ue.InterestId";*/
+        $sql = "SELECT
+                    Uid,
+                    CreateTime,-- 创建时间
+                    UserStatus,-- 用户状态
+                    UserName, -- 称呼
+                    FirstName,-- 用户名字
+                    LastName, -- 用户姓氏
+                    UserRole, -- 用户角色
+                    UserEmail, -- 用户邮箱
+                    UserContact, -- 联系电话
+                    UserPosition -- 用户职位
+                FROM
+                    Customer_User";
         $query = $this->db->query($sql);
         $rs = $query->result_array($query);
-        $this->data['rs']->$rs;
+        $this->data['rs']=$rs;
         $this->data['title'] = 'User';
 
         //$this->data['status'] =  $this->UserModel->
@@ -89,7 +100,44 @@ class User extends MY_Controller {
         $this->load->view('customer/user_list', $this->data);
 
     }
-
+    private function userDetailBase($id)
+    {
+        $this->data['id'] = $id;
+        $this->data['pre_nav'] = array('title' => 'User Manage', 'uri'=> $this->current_controller);
+        $this->data['title'] = 'User Detail';
+        $this->load->view('customer/user_list_detail', $this->data);
+    }
+    public function userListDetail($id)
+    {
+        $this->data["pageshow"] = "pageshow";
+        $this->data["information"] = "active";
+        $sql = "SELECT * FROM Customer_User where Uid='$id'";
+        $query = $this->db->query($sql);
+        $rs = $query->row_array($query);
+        $this->data['item']=$rs;
+        self::userDetailBase($id);
+    }
+    public function userListDetailTrace($id)
+    {
+        $this->data["tracePageshow"] = "pageshow";
+        $this->data["trace"] = "active";
+        self::userDetailBase($id);
+    }
+    public function userListForChangeStatusDo($id)
+    {
+        $value = $this->input->post('value');
+        $data = array(
+            'UserStatus'=>$value
+        );
+        $this->db->where('Uid',$id);
+        $re = $this->db->update('Customer_User',$data);
+        if(!$re)
+        {
+            echo responseErrStr("更新失败!");
+            return;
+        }
+        echo responseTrueStr("更新成功!");
+    }
     //处理咨询
     public function process(){
         $ids = $this->input->post('ids');

@@ -50,20 +50,11 @@
             </div>
         </div>
         <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li class="<?php echo $allConsulting;?>" role="presentation">
-                <a href="/customer/consulting/allConsulting" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">全部</a>
-            </li>
-            <li class="<?php echo $newRegister;?>" role="presentation">
-                <a href="/customer/consulting" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">新申请</a>
-            </li>
-            <li class="<?php echo $alreadyCommunicated;?>" role="presentation">
-                <a href="/customer/consulting/alreadyCommunicated" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已线下沟通</a>
+            <li class="<?php echo $notRegister;?>" role="presentation">
+                <a href="/customer/consulting/notRegister" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">未注册</a>
             </li>
             <li class="<?php echo $alreadyRegister;?>" role="presentation">
-                <a href="/customer/consulting/alreadyRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经邀请注册</a>
-            </li>
-            <li class="<?php echo $alreadyInviteRegister;?>" role="presentation">
-                <a href="/customer/consulting/alreadyInviteRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经注册</a>
+                <a href="/customer/consulting/alreadyRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经注册</a>
             </li>
         </ul>
 				<div class="graph-body">
@@ -155,7 +146,7 @@
                                                         </td>
                                                         <td><?php echo $item['InterestName'] ?></td>
 														<!--<td><?php echo $item['RequestComment'] ?></td>-->
-                                                        <td><button type="button" class="btn btn-info">更多...</button></td>
+                                                        <td><button type="button" onclick="location.href='/customer/consulting/consultingDetail/<?php echo $item['Id'] ?>';" class="btn btn-info">更多...</button></td>
 													</tr>
 													<?php endforeach ?>
                       </tbody>                                     

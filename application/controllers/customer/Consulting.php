@@ -88,19 +88,20 @@ class Consulting extends MY_Controller {
     }
     //咨询页
     public function index() {
-        $this->data["newRegister"] = "active";
-        self::ConsultingList(0);
+        $this->data["notRegister"] = "active";
+        self::ConsultingListBase(array(0,1,2));
     }
-    private function ConsultingList($activateStatus)
+    private function ConsultingListBase($activateStatus)
     {
-        $where = $activateStatus>=0?" where ActivateStatus=$activateStatus":"";
+        $activateStatusStr = implode(",", $activateStatus);
+        $where = count($activateStatusStr)>=0?" and ActivateStatus in ($activateStatusStr)":"";
         $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
                 bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
                 bi.name as InterestName,ue.RequestComment 
                 from User_Enquiry as ue 
                 inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
                 inner join Base_Region as br on br.Id = ue.RegionId
-                inner join Base_Interest as bi on bi.Id = ue.InterestId  
+                inner join Base_Interest as bi on bi.Id = ue.InterestId  where CheckStatus > 0
                 $where
                 ";
 
@@ -111,29 +112,129 @@ class Consulting extends MY_Controller {
         $this->data['title'] = 'Consulting';
         $this->load->view('customer/consulting', $this->data);
     }
-    public function allConsulting()
-    {
-        $this->data["allConsulting"] = "active";
-        self::ConsultingList(-1);
-    }
-    public function newRegister()
+    public function notRegister()
     {
         self::index();
-    }
-    public function alreadyCommunicated()
-    {
-        $this->data["alreadyCommunicated"] = "active";
-        self::ConsultingList(1);
     }
     public function alreadyRegister()
     {
         $this->data["alreadyRegister"] = "active";
-        self::ConsultingList(2);
+        self::ConsultingListBase(array(3));
     }
-    public function alreadyInviteRegister()
+    private function consultingDetailBase($id)
     {
-        $this->data["alreadyInviteRegister"] = "active";
-        self::ConsultingList(3);
+        $this->data["id"] = $id;
+        $this->data['pre_nav'] = array('title' => 'Consulting', 'uri'=> $this->current_controller) ;
+        $this->data['title'] = 'Consulting Detail';
+        $this->load->view('customer/consulting_detail', $this->data);
+    }
+    //详细页基本信息
+    public function consultingDetail($id)
+    {
+        $this->data["pageshow"] = "pageshow";
+        $this->data["information"] = "active";
+        $where = " and ue.Id=$id";
+        $sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
+                bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
+                bi.name as InterestName,ue.RequestComment 
+                from User_Enquiry as ue 
+                inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
+                inner join Base_Region as br on br.Id = ue.RegionId
+                inner join Base_Interest as bi on bi.Id = ue.InterestId  where CheckStatus > 0
+                $where
+                ";
+        $query = $this->db->query($sql);
+        $rs = $query->row_array($query);
+        $this->data['rs'] = $rs;
+        self::consultingDetailBase($id);
+    }
+    //跟踪日志
+    public function consultingDetailNotes($id)
+    {
+        $this->data["notes"] = "active";
+        $this->data["pageshowNotes"] = "pageshow";
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        if(!empty($contactEmail)) {
+            $sql = "select * from User_Enquiry_Notes where ContactEmail='$contactEmail' order by id desc";
+            $query = $this->db->query($sql);
+            $rs = $query->result_array($query);
+            $this->data['rs'] = $rs;
+        }
+        self::consultingDetailBase($id);
+    }
+    //提交跟踪记录
+    public function consultingNotesSubmitDo()
+    {
+        $id = $this->input->post('id');
+        $notesContent = $this->input->post('notesContent');
+
+        if(intval($id)<=0)
+        {
+            echo responseErrStr("没有正确的ID");
+            return;
+        }
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        if(!empty($contactEmail) && !empty($notesContent))
+        {
+            $data = array(
+                "ContactEmail"=>$contactEmail,
+                "NotesContent"=>$notesContent
+            );
+            $re = $this->db->insert('User_Enquiry_Notes', $data);
+            echo  responseTrueStr("提交成功");
+        }
+        else
+        {
+            echo responseErrStr("请填写内容");
+        }
+    }
+    //删除跟踪记录
+    public function consultingNotesDeleteDo()
+    {
+        $id = $this->input->post('id');
+        if(intval($id)<=0)
+        {
+            echo responseErrStr("没有正确的ID");
+            return;
+        }
+        $this->db->where('id', $id);
+        $re = $this->db->delete('User_Enquiry_Notes');
+        echo  responseTrueStr("删除成功");
+    }
+    //使用者填写资料历史
+    public function consultingApplyHistory($id)
+    {
+        $this->data["applyHistoryShow"] = "pageshow";
+        $this->data["history"] = "active";
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        $sql = "select ue.*,bi.name as InterestName from User_Enquiry ue
+                inner join Base_Interest as bi on bi.Id = ue.InterestId
+                where ContactEmail='$contactEmail'
+                order by id desc";
+        $query = $this->db->query($sql);
+        $rs = $query->result_array($query);
+        $this->data['rs'] = $rs;
+        self::consultingDetailBase($id);
+    }
+    public function consultingselectCheckInfoDo($id)
+    {
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        if(!empty($contactEmail))
+        {
+            $sql = "update User_Enquiry set CheckStatus=
+                ( CASE WHEN id = $id THEN 1 
+                    ELSE 0 END) where ContactEmail='$contactEmail'";
+            $re = $this->db->query($sql);
+            echo responseTrueStr("选择成功!");
+            return;
+        }
+        echo responseTrueStr("选择失败!");
+    }
+    public function consultingSendEmail($id)
+    {
+        $this->data["sendEmail"] = "active";
+        $this->data["pageshowEmail"] = "pageshow";
+        self::consultingDetailBase($id);
     }
     //处理咨询
     public function process(){
