@@ -11,7 +11,6 @@ function responseErr($errMessage,$data=array())
 {
     $result = responseBase(1,$errMessage,$data);
     return $result;
-    
 }
 function responseErrStr($errMessage,$data=array())
 {
