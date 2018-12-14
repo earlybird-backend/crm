@@ -228,6 +228,7 @@
 					</section>
 				</div>
 				<div class="file-sec-wrap-info">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 					<button type="submit" class="btn-rectangular contact-info-add">确定</button>
 				</div>
 			</form>
@@ -468,6 +469,7 @@
 					</section>
 				</div>
 				<div class="file-sec-wrap-info">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 					<button type="submit" class="btn-rectangular">确定</button>
 				</div>
 			</form>
@@ -585,6 +587,7 @@
 					</section>
 				</div>
 				<div class="file-sec-wrap-info">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 					<button type="submit" class="btn-rectangular">确定</button>
 				</div>
 			</form>
@@ -642,6 +645,7 @@
 					</section>
 				</div>
 				<div class="file-sec-wrap-info">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 					<button type="submit" class="btn-rectangular">确定</button>
 				</div>
 			</form>

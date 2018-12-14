@@ -1,16 +1,12 @@
 <?php  include  $GLOBALS['view_folder'].'customer/__header.php'; ?>
-
-
-<style>        
-        
-    td.highlight {
-        background-color: whitesmoke !important;
-    }
-   .grapha-header h5{
-       font-size:15px;
-   }
+<style>
+td.highlight {
+ background-color: whitesmoke !important;
+}
+.grapha-header h5{
+ font-size:15px;
+}
 </style>
-
 <div class="clearing-status">
         <div class="grapha-header">
             <div class="row">
@@ -19,7 +15,6 @@
                 </div>
                 <div class="col-md-6">
                     <h5 class="pull-right"><a href="<?php echo base_url($link. "/market");?>" ><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Buyer</a></h5>
-                    <!--  <a href="javascript:void(0)" data-toggle="modal" data-target="#supplier_add" ><i class="fa fa-plus" aria-hidden="true"></i> 新增供应商</a></h4>-->
                 </div>
             </div>
         </div>
@@ -29,13 +24,13 @@
                       <thead>
                            <tr>
                                 <th style="text-align: center;"><span>#ID</span></th>
-                                <th style="text-align: center;width:140px;"><span>集团公司</span></th>
-                                <th style="text-align: center;width:140px;"><span>买家市场</span></th>
-                                <th style="text-align: center;"><span>市场币别</span></th>
-                                <th style="text-align: center;"><span>清算负责人</span></th>
-                                <th style="text-align: center;"><span>信息修改</span></th>
-                                <th style="text-align: center;"><span>供应商清单</span></th>
-                                <th style="text-align: center;"><span>历史数据</span></th>
+                                <th style="text-align: center;width:140px;"><span>集团名称</span></th>
+                                <th style="text-align: center;width:140px;"><span>行业</span></th>
+                                <th style="text-align: center;"><span>国家</span></th>
+                                <th style="text-align: center;"><span>类型</span></th>
+                                <th style="text-align: center;width:140px;"><span>网站</span></th>
+                                <th style="text-align: center;"><span>市场个数</span></th>
+                                <th style="text-align: center;"></th>
                             </tr>
                       </thead>
                       
@@ -43,25 +38,26 @@
                             <?php
                             if( isset($rs) && is_array($rs) ) {
                                 $num = 0;
-                                foreach($rs as $v){
+                                foreach($rs as $v) {
                                     $num++;                                                              
-                                $info = '';
-                                if($v['UserName']!=""){
+                                    $info = '';
+                                if($v['UserName']!="") {
                                     $info = $v['UserName'];
-																}
-																if($v['UserEmail'] != ""){
-                                    $info .='（'.$v['UserEmail'].'）';
-																}
+				}
+				if($v['UserEmail'] != "") {
+                                  //  $info .='（'.$v['UserEmail'].'）';
+				}
                             ?>
-                                <tr id="<?php echo $v["CashpoolCode"]; ?>">
+                                <tr id="<?php echo $v["Id"]; ?>">
                                     <td style="text-align: center;width: 50px;"><?php echo $num; ?></td>                                    
                                     <td style="text-align: center;width: 100px;"><?php echo $v['CompanyName']; ?></td>
-                                    <td style="text-align: center;width: 100px;"><?php echo $v['CompanyDivision']; ?>  </td>
-                                    <td style="text-align: center;width: 100px;"><?php echo $v['CurrencyName']; ?>  </td>
-                                    <td style="text-align: center;width: 120px;"><?php echo $info; ?></td>
-                                    <td style="text-align: center;"><a href="/customer/customer/editmarket/<?php echo $v['CompanyId']; ?>" name="market"> <i class="fa fa-cogs"></i> 修改</a></td>
-                                    <td style="text-align: center;"><a href="/customer/customer/suppliers?marketid=<?php echo $v["marketid"] ?>&code=<?php echo $v["CashpoolCode"] ?>" name="suppliers"> <i class="fa fa-users"></i> 查看</a></td>
-                                    <td style="text-align: center;"><a href="javascript:;" name="history"> <i class="fa fa-history"></i> 历史数据</a></td>
+                                    <td style="text-align: center;width: 100px;"><?php echo $v['Industry']; ?></td>
+                                    <td style="text-align: center;width: 100px;"><?php echo $v['Country']; ?></td>
+                                    <td style="text-align: center;width: 120px;"><?php echo $v['Ctype'] ?></td>
+                                    <td style="text-align: center;width: 120px;"><?php echo $v['CompanyWebsite'] ?></td>
+                                    <td style="text-align: center;width: 120px;"><?php echo $v['NUM'] ?></td>
+                                    <td style="text-align: center;width: 120px;">
+     <a href='/customer/customer/editmarket/<?php echo $v['Id']?>' >管理</a></td>
                                 </tr>
                             <?php
                                 }

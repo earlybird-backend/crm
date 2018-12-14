@@ -62,7 +62,7 @@ class Customer extends MY_Controller {
 
         $this->load->model('PlansModel');
         $this->load->model('CurrencylistModel');
-		$this->load->model('ConfigurationModel');
+        $this->load->model('ConfigurationModel');
 
 
         $this->data['link'] = $this->current_controller;
@@ -82,27 +82,33 @@ class Customer extends MY_Controller {
     }
 
     public function index() {
-
         $this->db = $this->load->database('bird',true);
-
-        $sql = "select c.CompanyName,a.CompanyDivision,a.CurrencyName,  
-                	IFNULL(u.UserName,'') as UserName, 
-					IFNULL(u.UserEmail,'') as UserEmail ,
-					a.CompanyId,a.Id as marketId,a.CashpoolCode                      
-                  from Customer_Cashpool a
-                  inner join Base_Companys c ON c.Id = a.CompanyId
-                  left join Customer_User u  ON u.Uid = a.UserId AND u.UserStatus = 1
-                  where a.MarketStatus >= 0;
-                  ";
-
-        $query = $this->db->query($sql);
-        $rs = $query->result_array();
+        $sql = "SELECT c.Id,c.CompanyName,ct.name Country, i.name Industry ,t.name Ctype,c.CompanyWebsite FROM Base_Companys c 
+                LEFT JOIN Base_Industry i ON c.IndustryId = i.id 
+                LEFT JOIN Base_Country ct on c.CountryId = ct.id LEFT JOIN Base_Type t ON c.TypeId = t.id WHERE ParentId=0 AND CompanyStatus=1 ORDER BY c.Id DESC;";
+        $query    = $this->db->query($sql);
+        $rs       = array();
+        foreach($query->result_array() as &$r) {
+            $r['NUM'] = 0;
+            $rs[$r['Id']] = $r;
+        }
+        $ids_arr  = array_column($rs, 'Id');
+        $ids      = implode("','" , $ids_arr);
+        $g_sql    = "SELECT GroupId,count(GroupId) as NUM FROM earlybird.Customer_Cashpool WHERE GroupId IN ('{$ids}') Group BY GroupId;";
+        $g_query  = $this->db->query($g_sql);
+        $g_rs     = array();
+        foreach($g_query->result_array() as $g) {
+            $g_rs[$g['GroupId']] = $g['NUM'];
+        }
+        //var_dump($g_rs);exit();
+     
+        $exist_id = array_intersect(array_keys($rs) , array_keys($g_rs));
+        foreach($exist_id as $e) {
+            $rs[$e]['NUM'] = $g_rs[$e]['NUM'];    
+        }
         $this->data['rs'] = $rs;
-
         $this->data['title'] = 'Customer Manager';
-
         $this->load->view('customer/customer_list', $this->data);
-
     }
 
     public function suppliers(){
@@ -111,10 +117,10 @@ class Customer extends MY_Controller {
         $code = $this->input->get('code');
         //数据板信息
         $panel_sql = "SELECT                 
-					COUNT(s.Id) as TotalVendor,														#共有供应商
-					SUM( CASE WHEN i.Id IS NOT NULL THEN 1 ELSE 0 END) as TotalRegistered,			#已注册供应商
-					SUM( CASE WHEN q.Vendorcode IS NOT NULL THEN 1 ELSE 0 END) as TotalBid,		#参与开价供应商
-					SUM( CASE WHEN a.Vendorcode IS NOT NULL THEN 1 ELSE 0 END) as TotalAward		#清算供应商
+					COUNT(s.Id) as TotalVendor,														
+					SUM( CASE WHEN i.Id IS NOT NULL THEN 1 ELSE 0 END) as TotalRegistered,		
+					SUM( CASE WHEN q.Vendorcode IS NOT NULL THEN 1 ELSE 0 END) as TotalBid,
+					SUM( CASE WHEN a.Vendorcode IS NOT NULL THEN 1 ELSE 0 END) as TotalAward	
 					FROM `Customer_Suppliers` s                
 					LEFT JOIN `Base_Vendors_Items` i ON i.SupplierId = s.Id
 					LEFT JOIN (
@@ -125,7 +131,7 @@ class Customer extends MY_Controller {
 					) a ON a.Vendorcode = s.Vendorcode							
 					WHERE s.CashpoolCode = '{$code}'";
 
-
+        //echo $panel_sql;exit();
         $panel_query = $this->db->query($panel_sql);
         $panel_rs = $panel_query->first_row('array');
         $this->data['panel'] =$panel_rs;
@@ -168,7 +174,7 @@ class Customer extends MY_Controller {
         //行业信息
         $this->data['industry'] = $this->getIndustry();
         //国家信息
-        $this->data['Region'] = $this->getCountry();
+        $this->data['country'] = $this->getCountry();
         //公司类型信息
         $this->data['type'] = $this->getType();
         //额外信息范围
@@ -178,15 +184,38 @@ class Customer extends MY_Controller {
 
         $this->data['pre_nav'] = array('title' => 'Buyer Manager', 'uri'=> $this->current_controller) ;
         $this->data['title'] = 'Add Buyer';
+        $this->data['mod'] = 'add';
 
         $this->load->view('customer/market_add', $this->data);
     }
 
-    public function savecompany(){
 
+    public function savenewcompany() {
+
+        $this->db = $this->load->database('bird',true);
+        $companyname   = $this->input->post('name');
+        $companyenname = $this->input->post('enname');
+        if (empty($companyenname)) {
+            $companyenname = '';
+        }
+        $groupid       = $this->input->post('groupid');
+        $create_user   = $this->getCreateUser();
+        $id = $this->buildUUID();
+        $insert_sql = "INSERT INTO `Base_Companys`
+                      (`Id`, `CreateUser`, `CompanyName`, `CompanyEnName`, `CompanyWebsite`, `CompanyAddress`, `ContactPerson`,  `ContactPhone`, `CompanyInfo`, `ParentId`)
+      VALUES ({$id},'{$create_user}', '{$companyname}', '{$companyenname}', '暂无', '暂无', '暂无', '暂无', '暂无', " . $groupid . ")";
+        
+        $data = [];
+        if ($this->db->query($insert_sql)) {
+            $data =  array("name"=>$companyname, 'id' => $id);
+        }
+       $this->toJson($data);
+       //echo json_encode($data);
+    }
+
+    public function savecompany(){
         $company_info = $this->input->post('company');
         $company = json_decode($company_info);
-
 
         $this->db = $this->load->database('cisco',true);
         if(!isset($company->id)){
@@ -201,8 +230,8 @@ class Customer extends MY_Controller {
         $create_user = $this->getCreateUser();
         $id = $this->buildUUID();
         $insert_sql = "INSERT INTO `Base_Companys` 
-                      (`Id`, `CreateUser`, `CompanyName`, `CompanyEnName`, `CompanyWebsite`, `CompanyAddress`, `IndustryId`, `CountryId`, `TypeId`, `FiscalMonth`, `ContactPerson`, `ContactEmail`, `ContactPhone`, `CompanyInfo`) 
-                      VALUES ({$id}, '".$create_user
+                      (`CompanyCode`, `Id`, `CreateUser`, `CompanyName`, `CompanyEnName`, `CompanyWebsite`, `CompanyAddress`, `IndustryId`, `CountryId`, `TypeId`, `FiscalMonth`, `ContactPerson`, `ContactEmail`, `ContactPhone`, `CompanyInfo`, `ParentId`) 
+                      VALUES ('{$company->division}',{$id}, '".$create_user
             ."', '".$company->name
             ."', '".$company->name
             ."', '".$company->site
@@ -212,9 +241,9 @@ class Customer extends MY_Controller {
             ."', '".$company->type
             ."', '".$company->endtime
             ."', '暂无', '暂无', ".$company->phone
-            .", '暂无')";
+            .", '暂无', 0)";
+        $this->db->trans_begin();
         $this->db->query($insert_sql);
-
         $contact1 = $company->contact->box1;
         $company->contact->box1 = $this->saveCustomerUser($contact1,$id,'Enterprise');
 
@@ -229,7 +258,12 @@ class Customer extends MY_Controller {
         $ext_sql = "insert into Customer_Extra (Id,CreateUser,CompanyId,SaleVolumeId,SaleVolume,PurhchaseVolumeId,PurhchaseVolume,CashflowVolumeId,CashflowVolume) 
                     values ({$ext_id},'{$create_user}',{$id},{$company->scope1},'{$company->other1}',{$company->scope2},'{$company->other2}',{$company->scope3},'{$company->other3}')";
         $this->db->query($ext_sql);
-
+        if ($this->db->trans_status === FALSE) {
+            $this->db->trans_rollback();
+            return array();
+        } else {
+            $this->db->trans_commit();
+        }
         return array("id"=>$id,'ext_id'=>$ext_id,'contact'=>$company->contact);
     }
 
@@ -452,7 +486,8 @@ class Customer extends MY_Controller {
 
     public function editmarket($companyid){
 
-        $this->db = $this->load->database('cisco',true);
+        $this->db = $this->load->database('bird',true);
+        $this->data['mod'] = 'edit';
 
         //行业信息
         $this->data['industry'] = $this->getIndustry();
@@ -465,19 +500,19 @@ class Customer extends MY_Controller {
         //币种信息
         $this->data['cur'] = $this->getCurrency();
 
-        //获取公司信息
-        $company_sql = 'select * from Base_Companys where Id='.$companyid;
-        $company_query = $this->db->query($company_sql);
-        $company_rs = $company_query->first_row('array');
-        $this->data['company'] = $company_rs;
+        //获取集团信息
+        $group_sql = 'select * from Base_Companys where Id='.$companyid;
+        $group_query = $this->db->query($group_sql);
+        $group_rs = $group_query->first_row('array');
+        $this->data['group'] = $group_rs;
 
-        //获取公司额外信息
+        //获取集团额外信息
         $ext_sql = "select * from Customer_Extra where CompanyId=".$companyid;
         $ext_query = $this->db->query($ext_sql);
         $ext_rs = $ext_query->first_row('array');
         $this->data['ext_value'] = $ext_rs;
 
-        //获取公司联系信息
+        //获取集团联系信息
         $contact_sql = "select * from Customer_User where CompanyId = ".$companyid;
         $contact_query = $this->db->query($contact_sql);
         $contact_rs = $contact_query->result_array();
@@ -501,12 +536,26 @@ class Customer extends MY_Controller {
         }
         $this->data['contact'] = $contact;
 
-        //获取市场信息
-        $market_sql = "select a.*,u.Uid,u.UserName from Customer_Cashpool as a,Customer_User as u where a.UserId=u.Uid and a.CompanyId=".$companyid;
-        $market_query = $this->db->query($market_sql);
-        $market_rs = $market_query->result_array();
-        $this->data['market'] = $market_rs;
-
+        //获取公司信息
+        $company_sql = 'select * from Base_Companys where ParentId='.$companyid;
+        $company_query = $this->db->query($company_sql);
+        $company_rs = [];
+        foreach($company_query->result_array() as $row) {
+            $company_rs[] = $row;
+        }
+        $this->data['company'] = $company_rs;
+        if ($company_rs && count($company_rs) > 0) {
+            $company_ids = array_column($company_rs, 'Id');
+            $company_ids = implode("','" , $company_ids);
+            //获取市场信息
+            $market_sql = "select u.Uid,u.UserName,b.CompanyName,a.* from Customer_Cashpool as a,Customer_User as u,Base_Companys as b where a.UserId=u.Uid and b.Id = a.CompanyId and a.CompanyId IN ('{$company_ids}')";
+            $market_query = $this->db->query($market_sql);
+            $market_rs = $market_query->result_array();
+            $this->data['market'] = $market_rs;
+        } else {
+            $this->data['market'] = [];
+        }
+       //var_dump($market_sql, $market_rs);exit();
         //获取清算负责人
         $sql = "select Uid,UserName from Customer_User where UserRole='Charge' and UserStatus =1 and CompanyId={$companyid}";
         $query = $this->db->query($sql);
@@ -516,7 +565,8 @@ class Customer extends MY_Controller {
         $this->data['pre_nav'] = array('title' => 'Buyer Manager', 'uri'=> $this->current_controller) ;
         $this->data['title'] = 'Edit Buyer';
 
-        $this->load->view('customer/market_edit', $this->data);
+        //$this->load->view('customer/market_edit', $this->data);
+        $this->load->view('customer/market_add', $this->data);
     }
 
 
