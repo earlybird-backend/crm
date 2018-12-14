@@ -188,6 +188,7 @@ class Consulting extends MY_Controller {
             echo responseErrStr("请填写内容");
         }
     }
+    //删除跟踪记录
     public function consultingNotesDeleteDo()
     {
         $id = $this->input->post('id');
@@ -200,12 +201,34 @@ class Consulting extends MY_Controller {
         $re = $this->db->delete('User_Enquiry_Notes');
         echo  responseTrueStr("删除成功");
     }
-    //操作日志
-    public function consultingDetailActiveLog($id)
+    //使用者填写资料历史
+    public function consultingApplyHistory($id)
     {
-        $this->data["dactive"] = "active";
-        $this->data["pageshowActive"] = "pageshow";
+        $this->data["applyHistoryShow"] = "pageshow";
+        $this->data["history"] = "active";
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        $sql = "select ue.*,bi.name as InterestName from User_Enquiry ue
+                inner join Base_Interest as bi on bi.Id = ue.InterestId
+                where ContactEmail='$contactEmail'
+                order by id desc";
+        $query = $this->db->query($sql);
+        $rs = $query->result_array($query);
+        $this->data['rs'] = $rs;
         self::consultingDetailBase($id);
+    }
+    public function consultingselectCheckInfoDo($id)
+    {
+        $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        if(!empty($contactEmail))
+        {
+            $sql = "update User_Enquiry set CheckStatus=
+                ( CASE WHEN id = $id THEN 1 
+                    ELSE 0 END) where ContactEmail='$contactEmail'";
+            $re = $this->db->query($sql);
+            echo responseTrueStr("选择成功!");
+            return;
+        }
+        echo responseTrueStr("选择失败!");
     }
     public function consultingSendEmail($id)
     {

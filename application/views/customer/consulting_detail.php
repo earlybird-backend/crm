@@ -16,6 +16,14 @@
     {
         display: block; !important;
     }
+    #myTable th {
+        font-size: 12px;
+        text-align: center;
+    }
+    #myTable1 th {
+        font-size: 12px;
+        text-align: center;
+    }
 </style>
 <ul class="nav nav-tabs nav-justified" role="tablist">
     <li class="<?php echo $information;?>" role="presentation">
@@ -24,13 +32,14 @@
     <li class="<?php echo $notes;?>" role="presentation">
         <a href="/customer/consulting/consultingDetailNotes/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">记录日志</a>
     </li>
-    <li class="<?php echo $dactive;?>" role="presentation">
-        <a href="/customer/consulting/consultingDetailActiveLog/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">操作日志</a>
+    <li class="<?php echo $history;?>" role="presentation">
+        <a href="/customer/consulting/consultingApplyHistory/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">申请历史</a>
     </li>
     <li class="<?php echo $sendEmail;?>" role="presentation">
         <a href="/customer/consulting/consultingSendEmail/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">发送邮件</a>
     </li>
 </ul>
+<!--基本信息-->
 <div class="infocls <?php echo $pageshow;?>">
     <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
         <div class="col-sm-3">
@@ -96,60 +105,121 @@
         <?php echo $rs['RequestComment'] ?>
     </div>
 </div>
-<div class="infocls <?php echo $pageshowActive;?>">
-<div class="row" style="padding: 25px;">
-    <div class="col-lg-12">
-        选择时间范围从 <input id="datetimeStart">   至   <input id="datetimeEnd">
-        &nbsp;&nbsp;
-        <button class="btn btn-primary" type="button"   onclick="" >
-            下载日志
-        </button>
-        <div style="margin-top: 10px;width: 100%;height: 200px;background-color:#a6e1ec">
-            <div style="margin: 0 auto;padding-top: 90px;text-align: center">90天内日志统计线图</div>
+<!--基本信息-->
+<!--申请历史-->
+<div class="infocls <?php echo $applyHistoryShow;?>">
+    <div class="graph-body">
+        <div class="table-body" style="padding:25px;">
+            <table id="myTable1" class="display" cellspacing="0">
+                <thead>
+                <tr>
+                    <th style="text-align: center;width: 210px;">
+                        <div style="width: 200px;margin-left: 10px;">
+                            <div style="margin: 0 auto;text-align: left">
+                                <span>&sdot;公司名称<br>&sdot;名 / 姓/ 所属角色</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="text-align: center;width: 160px;">
+                        <div style="width: 150px;margin-left: 10px;">
+                            <div style="margin: 0 auto;text-align: left">
+                                <span>&sdot;电子邮箱<br>&sdot;联系电话</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="text-align: center;width:160px;">
+                        <div style="width: 150px;margin-left: 10px;">
+                            <div style="margin: 0 auto;text-align: left">
+                                <span>&sdot;所属区域<br>&sdot;提交时间</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="text-align: left;"><span>意向</span></th>
+                    <th>选择</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($rs as $item): ?>
+                    ?>
+                    <tr>
+                        <td>
+                            <div style="width: 200px;margin-left: 10px;">
+                                <div style="margin: 0 auto;text-align: left">
+                                    <span class="split1"><?php echo $item['CompanyName'] ?></span>
+                                    <br>
+                                    <span class="split1"><?php echo $item['FirstName'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['LastName'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['RoleName'] ?></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="width: 150px;margin-left: 10px;">
+                                <div style="margin: 0 auto;text-align: left">
+                                    <span class="split1"><?php echo $item['ContactEmail'] ?></span>
+                                    <br>
+                                    <span class="split1"><?php echo $item['ContactPhone'] ?></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="width: 150px;margin-left: 10px;">
+                                <div style="margin: 0 auto;text-align: left">
+                                    <span class="split1"><?php echo $item['RegionName'] ?></span>
+                                    <br>
+                                    <span class="split1"><?php echo $item['CreateTime'] ?></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><?php echo $item['InterestName'] ?></td>
+                        <td><input type="radio" name="selectCheckInfo" onchange="consultingselectCheckInfoDo(<?php echo $item['Id'] ?>);"  value="<?php echo $item['Id'] ?>" <?php echo $item["CheckStatus"]==1?"checked=\"checked\"":"";?> /></td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
         </div>
-        <script>
-            $("#datetimeStart").datetimepicker({//选择年月日
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN',
-                weekStart: 1,
-                todayBtn: 1,//显示‘今日’按钮
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,  //Number, String. 默认值：0, 'hour'，日期时间选择器所能够提供的最精确的时间选择视图。
+     </div>
+<script>
+    function consultingselectCheckInfoDo(id) {
+        $.post('/customer/consulting/consultingselectCheckInfoDo/'+id,{},function (data) {
+            alert(data.message);
+            if(data.error==1)
+            {
+                return;
+            }
+            location.href='/customer/consulting/consultingApplyHistory/'+id;
+        },'json');
+    }
+    $(document).ready(function () {
+        $('#myTable1').DataTable( {
+            bStateSave:true,
+            bFiltered:false,
+            info:true,
+            ordering:false,
+            searching:false,
+            bLengthChange: true,
+            paging:true,
+        } );
 
-                clearBtn:true,//清除按钮
-
-                forceParse: 0
-            });
-            $("#datetimeEnd").datetimepicker({//选择年月日
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN',
-                weekStart: 1,
-                todayBtn: 1,//显示‘今日’按钮
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,  //Number, String. 默认值：0, 'hour'，日期时间选择器所能够提供的最精确的时间选择视图。
-
-                clearBtn:true,//清除按钮
-
-                forceParse: 0
-            });
-        </script>
-    </div>
+    });
+</script>
 </div>
-</div>
+<!--申请历史-->
+<!--发送Email-->
 <div class="infocls <?php echo $pageshowEmail;?>">
     <textarea style="width:inherit;height: 200px;padding: 5px;"></textarea>
     <div style="width:inherit;overflow: hidden">
         <div style="margin: 0 auto;width: 100px">
             <button class="btn btn-primary" type="button"    onclick="alert('发送成功');" >
-                提交
+                发送邮件
             </button>
         </div>
     </div>
 </div>
+<!--发送Email-->
+<!--跟踪记录-->
 <div class="infocls <?php echo $pageshowNotes;?>">
     <div class="row" style="width: 100%;margin: 0 auto;margin-top: 20px;">
         <div class="col-lg-6">&nbsp;</div>
@@ -157,8 +227,8 @@
             <div class="input-group">
                 <input id="notesContent" type="text" class="form-control">
                 <span class="input-group-btn">
-						<button class="btn btn-primary" type="button"  onclick="consultingNotesSubmitDo();" >
-							发送邮件
+						<button class="btn btn-primary" type="button"   onclick="consultingNotesSubmitDo();" >
+							提交
 						</button>
 					</span>
             </div><!-- /input-group -->
@@ -238,17 +308,6 @@
         } );
 
     });
-    $(document).ready(function () {
-        $('#myTable1').DataTable( {
-            bStateSave:true,
-            bFiltered:false,
-            info:true,
-            ordering:false,
-            searching:false,
-            bLengthChange: true,
-            paging:true,
-        } );
-
-    });
 </script>
+<!--跟踪记录-->
 <?php  include  $GLOBALS['view_folder'].'customer/__footer.php'; ?>
