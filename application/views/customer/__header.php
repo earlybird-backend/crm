@@ -10,15 +10,15 @@
         <?php if($this->uri->segment(3)){$slash='../../../';}else{$slash='../../';} ?>
 
         <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-        <!-- <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --> 
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap-modal/2.2.6/css/bootstrap-modal.min.css" />
+        <!--<link rel="stylesheet" type="text/css" href="<?php echo lang_url(); ?>assets/css/bootstrap.min.css" /> -->
         
-        <link rel="stylesheet" type="text/css" href="<?php echo lang_url(); ?>assets/css/bootstrap.min.css" /> 
-        
-       <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap-modal/2.2.6/css/bootstrap-modal.min.css" />
                 
         <link rel="stylesheet" type="text/css" href="<?php echo lang_url(); ?>assets/css/style_customer.css">             
         <link rel="stylesheet" type="text/css" href="<?php echo lang_url(); ?>assets/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo lang_url(); ?>assets/css/responsive.css" />
+
         
         
         <link rel="stylesheet" href="<?php echo lang_url(); ?>assets/css/bootstrap-datetimepicker.css" />
@@ -33,7 +33,7 @@
 
         <!--  <script src="<?php echo lang_url(); ?>assets/js/bootstrap.min.js"></script> -->
         <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-        <!--<script type="text/javascript" src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+        <script type="text/javascript" src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="<?php echo lang_url(); ?>assets/js/bootstrap-datetimepicker.js"></script>
         <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js"></script>
         <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"></script>
@@ -282,7 +282,7 @@
                             <?php echo '供应商管理' ?>
                         </a>
                 </li>
-                
+                <?php } ?>
                 <li>
                     <?php if($link == 'customer/user') { ?>
                     <a class="active" href="javascript:;" >
@@ -292,7 +292,6 @@
                             <?php echo '用户管理' ?>
                         </a>
                 </li>
-                <?php } ?>
                 <li>
                     <?php if($link == 'customer/consulting') { ?>
                     <a class="active" href="javascript:;" >

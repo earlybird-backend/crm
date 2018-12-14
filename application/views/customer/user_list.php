@@ -16,6 +16,18 @@
 		padding: 2px 5px;
 		margin: 5px;
 	}
+    #myTable .split1 {
+
+        border-bottom:1px solid #b1b1b1;
+    }
+    #myTable .split2:before
+    {
+        content:" / ";
+    }
+    #myTable th {
+        font-size: 12px;
+        text-align: center;
+    }
 </style>
 
 <div class="clearing-status">
@@ -32,62 +44,44 @@
                       <table id="myTable" class="display" cellspacing="0">
                       <thead>
                            <tr>
-                                <th style="text-align: center;"><span>标记</span></th>
-                                <th style="text-align: center;width:140px;"><span>用户状态</span></th>
-                                <th style="text-align: center;width:140px;"><span>提交时间</span></th>
-                                <th style="text-align: center;"><span>名</span></th>
-                                <th style="text-align: center;"><span>姓</span></th>
-                                <th style="text-align: center;"><span>公司</span></th>
-                                <th style="text-align: center;"><span>角色</span></th>
-                                <th style="text-align: center;"><span>邮箱</span></th>
-                                <th style="text-align: center;"><span>电话</span></th>
-                                <th style="text-align: center;"><span>区域</span></th>
-                                <th style="text-align: center;"><span>意向</span></th>
-                                <th style="text-align: center;"><span>备注</span></th>
+                                <th style="text-align: center;width:30px;"><span>状态</span></th>
+                                <th style="text-align: center;text-align: left;padding-left: 10px;">
+                                    <span>用户(称呼/名字/姓氏/角色/职位)</span>
+                                </th>
+                                <th style="text-align: center;width: 250px"><span>邮箱/联系电话</span></th>
+                                <th style="text-align: center;width: 150px;"><span>创建时间</span></th>
+                               <th style="width: 80px">&nbsp;</th>
                             </tr>
                       </thead>
-                      
                       <tbody>
-													<?php foreach($rs as $item): ?>
-															<?php
-																$status = "-";
-																switch ($item['ActivateStatus']){
-																		case 0:
-                                        $status="新申请";
-																			break;
-                                    case 1:
-                                        $status="已线下沟通";
-                                        break;
-                                    case 2:
-                                        $status="已邀请注册";
-                                        break;
-                                    case 3:
-                                        $status="已经注册";
-                                        break;
-																}
-															?>
-													<tr>
-														<td><input type="checkbox" value="<?php echo $item['Id'] ?>" /></td>
-														<td><?php echo $status ?></td>
-														<td><?php echo $item['CreateTime'] ?></td>
-														<td><?php echo $item['FirstName'] ?></td>
-														<td><?php echo $item['LastName'] ?></td>
-														<td><?php echo $item['CompanyName'] ?></td>
-														<td><?php echo $item['RoleName'] ?></td>
-														<td><?php echo $item['ContactEmail'] ?></td>
-														<td><?php echo $item['ContactPhone'] ?></td>
-														<td><?php echo $item['RegionName'] ?></td>
-														<td><?php echo $item['InterestName'] ?></td>
-														<td><?php echo $item['RequestComment'] ?></td>
-													</tr>
-													<?php endforeach ?>
+                            <?php foreach($rs as $item): ?>
+                            <tr>
+                                <td><input type="checkbox" checked="<?php echo intval($item['UserStatus'])==1?"true":"false" ?>" /></td>
+                                <td style="text-align: left;padding-left: 10px;">
+                                    <span class="split1"><?php echo $item['UserName'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['FirstName'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['LastName'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['UserRole'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['UserPosition'] ?></span>
+                                </td>
+                                <td>
+                                    <span class="split1"><?php echo $item['UserEmail'] ?></span>
+                                    <span class="split2"></span>
+                                    <span class="split1"><?php echo $item['UserContact'] ?></span>
+                                </td>
+                                <td><?php echo $item['CreateTime'] ?></td>
+                                <td><button type="button" onclick="location.href='/customer/user/userListDetail/<?php echo $item['Uid'] ?>';" class="btn btn-info">更多...</button></td>
+                            </tr>
+                            <?php endforeach ?>
                       </tbody>                                     
                 </table>                                                    
             </div>
         </div>
 </div>
-
-
 <script type="text/javascript">
     $(document).ready(function(){
 
