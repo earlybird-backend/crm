@@ -70,35 +70,64 @@ class User extends MY_Controller {
 
     //用户管理
     public function index() {
-
-        /*$sql = "select ue.Id,ue.ActivateStatus,ue.CreateTime,ue.FirstName,ue.LastName,ue.CompanyName,
-                bpr.name as RoleName,ue.ContactEmail,ue.ContactPhone,br.name as RegionName,
-                bi.name as InterestName,ue.RequestComment from User_Enquiry as ue 
-                inner join Base_PositionRole as bpr on bpr.Id = ue.PositionRoleId 
-                inner join Base_Region as br on br.Id = ue.RegionId
-                inner join Base_Interest as bi on bi.Id = ue.InterestId";*/
+        self::userBuyerList();
+    }
+    public function userBuyerList()
+    {
+        $this->data['buyer'] = 'active';
+        self::userListBase('buyer');
+    }
+    public function userVendorList()
+    {
+        $this->data['vendor'] = 'active';
+        self::userListBase('vendor');
+    }
+    private function userListBase($UserRole)
+    {
         $sql = "SELECT
-                    Uid,
-                    CreateTime,-- 创建时间
-                    UserStatus,-- 用户状态
-                    UserName, -- 称呼
-                    FirstName,-- 用户名字
-                    LastName, -- 用户姓氏
-                    UserRole, -- 用户角色
-                    UserEmail, -- 用户邮箱
-                    UserContact, -- 联系电话
-                    UserPosition -- 用户职位
+                    a.UserId, # 用户ID
+                    a.FirstName LastName, # 姓名 
+                    a.Position, # 职位
+                    a.Telephone, # 手机电话
+                    a.Cellphone, # 座机电话
+                    a.EmailAddress, # 电子邮件
+                    b.`name` as CountryName, # 国家
+                    a.CompanyName, # 公司名称
+                    a.RegisterDate # 注册时间
                 FROM
-                    Customer_User";
+                    Users_Profile a left join Base_Country b on a.CountryId=b.id
+                WHERE UserRole='$UserRole'
+              ORDER by RegisterDate DESC";
         $query = $this->db->query($sql);
         $rs = $query->result_array($query);
         $this->data['rs']=$rs;
+        $comm = '';
+        $userIdStr = '';
+        foreach ($rs as $item)
+        {
+            $userIdStr = $userIdStr.$comm.$item['UserId'];
+            $comm = ',';
+        }
+        if(!empty($userIdStr))
+        {
+            $sql = "SELECT
+                        a.UserId,
+                        count(1) AS num
+                    FROM
+                        Users_Profile a
+                    INNER JOIN Customer_User b ON a.EmailAddress = b.UserEmail
+                    INNER JOIN Customer_Cashpool c ON b.CompanyId = c.CompanyId
+                    WHERE
+                        a.UserId in ($userIdStr)
+                    GROUP BY
+                        UserId
+                    ";
+            $query = $this->db->query($sql);
+            $rsMarketCount = $query->result_array($query);
+            $this->data['rsMarketCount']=$rsMarketCount;
+        }
         $this->data['title'] = 'User';
-
-        //$this->data['status'] =  $this->UserModel->
-
         $this->load->view('customer/user_list', $this->data);
-
     }
     private function userDetailBase($id)
     {
@@ -111,7 +140,21 @@ class User extends MY_Controller {
     {
         $this->data["pageshow"] = "pageshow";
         $this->data["information"] = "active";
-        $sql = "SELECT * FROM Customer_User where Uid='$id'";
+        $sql = "SELECT *
+                FROM
+                   Users_Profile
+                WHERE
+                UserId = $id";
+        $query = $this->db->query($sql);
+        $rs = $query->row_array($query);
+        $this->data['info']=$rs;
+        $userEmail = $rs["EmailAddress"];
+        $sql = "SELECT
+                    *
+                FROM
+                    Customer_User
+                WHERE
+                    UserEmail='$userEmail'  LIMIT 1";
         $query = $this->db->query($sql);
         $rs = $query->row_array($query);
         $this->data['item']=$rs;
@@ -121,6 +164,11 @@ class User extends MY_Controller {
     {
         $this->data["tracePageshow"] = "pageshow";
         $this->data["trace"] = "active";
+        $sql = "select * from User_Active_Log WHERE user_id=$id";
+        $db1 = $this->load->database("activity",true);
+        $query =$db1->query($sql);
+        $rs = $query->result_array($query);
+        $this->data["rs"] = $rs;
         self::userDetailBase($id);
     }
     public function userListForChangeStatusDo($id)

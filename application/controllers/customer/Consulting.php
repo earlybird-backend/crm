@@ -112,7 +112,7 @@ class Consulting extends MY_Controller {
         $this->data['title'] = 'Consulting';
         $this->load->view('customer/consulting', $this->data);
     }
-    public function notRegister()
+    /*public function notRegister()
     {
         self::index();
     }
@@ -120,7 +120,7 @@ class Consulting extends MY_Controller {
     {
         $this->data["alreadyRegister"] = "active";
         self::ConsultingListBase(array(3));
-    }
+    }*/
     private function consultingDetailBase($id)
     {
         $this->data["id"] = $id;
@@ -219,6 +219,7 @@ class Consulting extends MY_Controller {
     public function consultingselectCheckInfoDo($id)
     {
         $contactEmail =  $this->db->query("select ContactEmail from User_Enquiry where id=$id")->row_array()["ContactEmail"];
+        //$id = $this->input->post('id');
         if(!empty($contactEmail))
         {
             $sql = "update User_Enquiry set CheckStatus=
