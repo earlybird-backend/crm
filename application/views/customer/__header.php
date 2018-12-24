@@ -309,8 +309,7 @@
 
                 </li>
 			</ul>			
-		</div>	
-			
+		</div>
 	</div>
 </header>
 <section class="main-wrap">
