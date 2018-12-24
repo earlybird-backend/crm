@@ -6,7 +6,19 @@ if(!function_exists('pr'))
 	echo '<pre>'; print_r($value); echo '</pre>';
   }
 }
-
+if(!function_exists('array_find'))
+{
+    function array_find($arr,$value,$keyfield,$refield)
+    {
+        foreach ($arr as $item)
+        {
+            if($item[$keyfield] == $value)
+            {
+                return $item[$refield];
+            }
+        }
+    }
+}
 function contextualTime($small_ts, $large_ts=false) {
   if(!$large_ts) $large_ts = strtotime(date('Y-m-d h:i:s',time()));
   $n = $large_ts - $small_ts;

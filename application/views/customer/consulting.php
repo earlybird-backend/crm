@@ -37,7 +37,7 @@
                     <h5 class="pull-left"><i class="fa fa-navicon" aria-hidden="true"></i>咨询记录</h5>
                 </div>
                 <div class="col-md-6">
-										<div style="text-align: right">
+										<!--<div style="text-align: right">
 											<select name="activatestatus">
 												<option value="0">新申请</option>
 												<option value="1">已线下沟通</option>
@@ -45,18 +45,18 @@
 												<option value="3">已经注册</option>
 											</select>
 											<button class="btn btn-primary">处理</button>
-										</div>
+										</div>-->
                 </div>
             </div>
         </div>
-        <ul class="nav nav-tabs nav-justified" role="tablist">
+        <!--<ul class="nav nav-tabs nav-justified" role="tablist">
             <li class="<?php echo $notRegister;?>" role="presentation">
                 <a href="/customer/consulting/notRegister" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">未注册</a>
             </li>
             <li class="<?php echo $alreadyRegister;?>" role="presentation">
                 <a href="/customer/consulting/alreadyRegister" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">已经注册</a>
             </li>
-        </ul>
+        </ul>-->
 				<div class="graph-body">
                   <div class="table-body" style="padding:25px;">  		
                       <table id="myTable" class="display" cellspacing="0">

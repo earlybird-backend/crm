@@ -6,6 +6,10 @@
     td.highlight {
         background-color: whitesmoke !important;
     }
+    .pageshow
+    {
+        display: block; !important;
+    }
    .grapha-header h5{
        font-size:15px;
    }
@@ -34,47 +38,53 @@
         <div class="grapha-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h5 class="pull-left"><i class="fa fa-navicon" aria-hidden="true"></i>用户状态</h5>
+                    <h5 class="pull-left"><i class="fa fa-navicon" aria-hidden="true"></i>用户列表</h5>
                 </div>
 
             </div>
         </div>
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+        <li class="<?php echo $buyer;?>" role="presentation">
+            <a href="/customer/user/userBuyerList" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">买家</a>
+        </li>
+        <li class="<?php echo $vendor;?>" role="presentation">
+            <a href="/customer/user/userVendorList" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">供应商</a>
+        </li>
+    </ul>
 				<div class="graph-body">
                   <div class="table-body" style="padding:25px;">  		
                       <table id="myTable" class="display" cellspacing="0">
                       <thead>
                            <tr>
-                                <th style="text-align: center;width:30px;"><span>状态</span></th>
-                                <th style="text-align: center;text-align: left;padding-left: 10px;">
-                                    <span>用户(称呼/名字/姓氏/角色/职位)</span>
+                                <th><span>姓名</span></th>
+                                <th>
+                                    <span>职位</span>
                                 </th>
-                                <th style="text-align: center;width: 250px"><span>邮箱/联系电话</span></th>
-                                <th style="text-align: center;width: 150px;"><span>创建时间</span></th>
-                               <th style="width: 80px">&nbsp;</th>
+                                <th><span>移动电话 / 座机电话</span></th>
+                                <th ><span>电子邮件</span></th>
+                               <th ><span>国家</span></th>
+                               <th><span>市场统计数</span></th>
+                               <th><span>注册时间</span></th>
+                               <th>&nbsp;</th>
                             </tr>
                       </thead>
                       <tbody>
                             <?php foreach($rs as $item): ?>
                             <tr>
-                                <td><input type="checkbox" checked="<?php echo intval($item['UserStatus'])==1?"true":"false" ?>" /></td>
-                                <td style="text-align: left;padding-left: 10px;">
-                                    <span class="split1"><?php echo $item['UserName'] ?></span>
-                                    <span class="split2"></span>
-                                    <span class="split1"><?php echo $item['FirstName'] ?></span>
-                                    <span class="split2"></span>
-                                    <span class="split1"><?php echo $item['LastName'] ?></span>
-                                    <span class="split2"></span>
-                                    <span class="split1"><?php echo $item['UserRole'] ?></span>
-                                    <span class="split2"></span>
-                                    <span class="split1"><?php echo $item['UserPosition'] ?></span>
+                                <td><?php echo $item['FirstName'].' '.$item['LastName'] ?></td>
+                                <td>
+                                    <?php echo $item['Position'] ?>
                                 </td>
                                 <td>
-                                    <span class="split1"><?php echo $item['UserEmail'] ?></span>
+                                    <span class="split1"><?php echo $item['Telephone'] ?></span>
                                     <span class="split2"></span>
-                                    <span class="split1"><?php echo $item['UserContact'] ?></span>
+                                    <span class="split1"><?php echo $item['Cellphone'] ?></span>
                                 </td>
-                                <td><?php echo $item['CreateTime'] ?></td>
-                                <td><button type="button" onclick="location.href='/customer/user/userListDetail/<?php echo $item['Uid'] ?>';" class="btn btn-info">更多...</button></td>
+                                <td><?php echo $item['EmailAddress'] ?></td>
+                                <td><?php echo $item['CountryName'] ?></td>
+                                <td><?php echo array_find($rsMarketCount,100,'UserId','num'); ?></td>
+                                <td><?php echo $item['RegisterDate'] ?></td>
+                                <td><button type="button" onclick="location.href='/customer/user/userListDetail/<?php echo $item['UserId'] ?>';" class="btn btn-info">更多...</button></td>
                             </tr>
                             <?php endforeach ?>
                       </tbody>                                     
