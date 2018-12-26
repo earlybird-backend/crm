@@ -1,5 +1,6 @@
 composer.phar
 /vendor/
+/assets/pic/*
 config.php
 database.php
 _config.php
