@@ -14,7 +14,7 @@ function responseErr($errMessage,$data=array())
 }
 function responseErrStr($errMessage,$data=array())
 {
-    $result = responseErr(0,$errMessage,$data);
+    $result = responseErr($errMessage,$data);
     return json_encode($result);
 }
 function responseTrue($message,$data=array())
