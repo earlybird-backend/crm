@@ -36,15 +36,100 @@
 </style>
 <ul class="nav nav-tabs nav-justified" role="tablist">
     <li class="<?php echo $information;?>" role="presentation">
-        <a href="/customer/user/userListDetail/<?php echo $id;?>" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">基本信息</a>
+        <a href="/customer/user/userListDetail/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="active" role="tab" data-toggle="tab">基本信息</a>
     </li>
+    <?php if($UserRole == "buyer"){?>
     <li class="<?php echo $company;?>" role="presentation">
-        <a href="/customer/user/userCompanyList/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">公司列表</a>
+        <a href="/customer/user/userCompanyList/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">公司列表</a>
     </li>
+    <?php }?>
+    <?php if($UserRole == 'vendor'){?>
+    <li class="<?php echo $cashpool;?>" role="presentation">
+        <a href="/customer/user/userCashpoolList/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">所属市场</a>
+    </li>
+    <?php }?>
     <li class="<?php echo $trace;?>" role="presentation">
-        <a href="/customer/user/userListDetailTrace/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">跟踪日志</a>
+        <a href="/customer/user/userListDetailTrace/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">跟踪日志</a>
     </li>
 </ul>
+<div class="infocls <?php echo $CashpoolPageshow;?>">
+    <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
+        <div class="graph-body">
+            <div class="table-body" style="padding:25px;">
+                <table id="myTableCashpool" class="display myTableCss" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th style="text-align: left">
+                            市场编号
+                        </th>
+                        <th style="text-align: left">
+                            市场名称
+                        </th>
+                        <th style="text-align: left">
+                            付款方式
+                        </th>
+                        <th style="text-align: left">
+                            下个付款日
+                        </th>
+                        <th style="text-align: left">
+                            市场状态
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($cashpoolList as $item): ?>
+                    <tr>
+                        <td>
+                            <?php echo $item["CashpoolCode"];?>
+                        </td>
+                        <td>
+                            <?php echo $item["CompanyDivision"];?>(<?php echo $item["CurrencyName"];?>)
+                        </td>
+                        <td>
+                            <?php
+                            switch ( strtolower($item["PaymentType"])){
+                                case "month":
+                                    echo "每月" . ($item["PaymentDay"] > 0 ? "第{$item["PaymentDay"]}天支付" : "最后1天支付") ;
+                                    break;
+                                case "week":
+                                    echo "每周" . ($item["PaymentDay"] < 6 ? "第".(intval($item["PaymentDay"]) + 1)."天支付" : "最后1天支付") ;
+                                    break;
+                                case "day":
+                                    echo "每隔 {$item["PaymentDay"]} 个交易日支付";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <?php echo $item["NextPaydate"];?>
+                        </td>
+                        <td>
+                            <?php
+                            echo $item['CashpoolStatus']==1?'正常竞价':
+                                $item['CashpoolStatus']==2?'无可用发票':'未参与市场';
+                            ?>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+                <script>
+                    var tableCashpool = $('#myTableCashpool').DataTable({
+                        bStateSave:true,
+                        bFiltered:false,
+                        info:true,
+                        ordering:false,
+                        searching:false,
+                        bLengthChange: true,
+                        paging:true,
+                    });
+                </script>
+                </div>
+            </div>
+        </div>
+</div>
 <div class="infocls <?php echo $CompanyPageshow;?>">
     <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
         <div class="graph-body">
@@ -115,7 +200,6 @@
     </div>
 </div>
 <div class="infocls <?php echo $pageshow;?>">
-    <?php if(!$item==null){?>
         <div class="row" style="margin: 0 auto;padding: 10px 0px 5px 0px;">
             <div class="col-sm-2">
                 姓名:<span class="split1"><?php echo $info["FirstName"].' '.$info['LastName']; ?></span>
@@ -147,6 +231,7 @@
         <div style="height: 5px;width:inherit;clear: both">
             <div style="height: 1px;background-color: #CCCCCC; width:90%; margin-left: 5px;"></div>
         </div>
+    <?php if(!$item==null){?>
     <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
         <div class="col-sm-3">
             称呼:<span class="split1"><?php echo $item["UserName"]; ?></span>

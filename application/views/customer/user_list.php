@@ -82,13 +82,13 @@
                                 </td>
                                 <td><?php echo $item['EmailAddress'] ?></td>
                                 <td><?php echo $item['CountryName'] ?></td>
-                                <td><?php echo array_find($rsMarketCount,100,'UserId','num'); ?></td>
+                                <td><?php echo array_find($rsMarketCount,$item['UserId'],'UserId','num'); ?></td>
                                 <td><?php echo $item['RegisterDate'] ?></td>
-                                <td><button type="button" onclick="location.href='/customer/user/userListDetail/<?php echo $item['UserId'] ?>';" class="btn btn-info">更多...</button></td>
+                                <td><button type="button" onclick="location.href='/customer/user/userListDetail/<?php echo $UserRole;?>/<?php echo $item['UserId'] ?>';" class="btn btn-info">更多...</button></td>
                             </tr>
                             <?php endforeach ?>
                       </tbody>                                     
-                </table>                                                    
+                </table>
             </div>
         </div>
 </div>

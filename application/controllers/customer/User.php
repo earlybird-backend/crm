@@ -84,6 +84,7 @@ class User extends MY_Controller {
     }
     private function userListBase($UserRole)
     {
+        $this->data["UserRole"] = $UserRole;
         $sql = "SELECT
                     a.UserId, # 用户ID
                     a.FirstName LastName, # 姓名 
@@ -110,7 +111,8 @@ class User extends MY_Controller {
         }
         if(!empty($userIdStr))
         {
-            $sql = "SELECT
+            if($UserRole == 'buyer') {
+                $sql = "SELECT
                         a.UserId,
                         count(1) AS num
                     FROM
@@ -122,6 +124,18 @@ class User extends MY_Controller {
                     GROUP BY
                         UserId
                     ";
+            }
+            else if($UserRole == 'vendor') {
+                $sql = "select c.UserId,
+                        COUNT(1) as num
+                        from 
+                            Users_Profile c
+                        inner join `Customer_Suppliers_Users` u on u.UserEmail = c.EmailAddress
+                        inner join `Customer_Suppliers` s ON s.Id = u.SupplierId  
+                        inner join `Customer_Cashpool` p ON p.CashpoolCode = s.CashpoolCode
+                        where u.UserStatus = 1
+                        GROUP BY c.UserId";
+            }
             $query = $this->db->query($sql);
             $rsMarketCount = $query->result_array($query);
             $this->data['rsMarketCount']=$rsMarketCount;
@@ -130,15 +144,19 @@ class User extends MY_Controller {
         $this->load->view('customer/user_list', $this->data);
     }
     //基本
-    private function userDetailBase($id)
+    private function userDetailBase($UserRole,$id)
     {
         $this->data['id'] = $id;
-        $this->data['pre_nav'] = array('title' => 'User Manage', 'uri'=> $this->current_controller);
+        $this->data['UserRole'] = $UserRole;
+        $title = $UserRole == "buyer"?"Buyer User Manage":($UserRole == "vendor"?"Supplier User Manage":"User Manage");//
+        $uri = $UserRole == "buyer"?"/userBuyerList":($UserRole == "vendor"?"/userVendorList":"");
+        $this->data['pre_nav'] = array('title' => $title, 'uri'=> $this->current_controller.$uri);
         $this->data['title'] = 'User Detail';
         $this->load->view('customer/user_list_detail', $this->data);
     }
+
     //用户信息
-    public function userListDetail($id)
+    public function userListDetail($UserRole,$id)
     {
         $this->data["pageshow"] = "pageshow";
         $this->data["information"] = "active";
@@ -160,10 +178,10 @@ class User extends MY_Controller {
         $query = $this->db->query($sql);
         $rs = $query->row_array($query);
         $this->data['item']=$rs;
-        self::userDetailBase($id);
+        self::userDetailBase($UserRole,$id);
     }
     //公司列表
-    public function userCompanyList($id)
+    public function userCompanyList($UserRole,$id)
     {
         $this->data["CompanyPageshow"] = "pageshow";
         $this->data["company"] = "active";
@@ -192,23 +210,14 @@ class User extends MY_Controller {
         $query =$this->db->query($sql);
         $rs = $query->result_array($query);
         $this->data["rsCompany"] = $rs;
-        self::userDetailBase($id);
+        self::userDetailBase($UserRole,$id);
     }
     //跟踪日志
-    public function userListDetailTrace($id)
+    public function userListDetailTrace($UserRole,$id)
     {
         $this->data["tracePageshow"] = "pageshow";
         $this->data["trace"] = "active";
-        /*$sEcho = intval($this->input->post('sEcho'));
-        $sEcho = $sEcho == 0?1:$sEcho;
-        $pagenum = 10;
-        $up = ($sEcho-1)*$pagenum;
-        $sql = "select * from User_Active_Log WHERE user_id=$id LIMIT $up,$pagenum";
-        $db1 = $this->load->database("activity",true);
-        $query =$db1->query($sql);
-        $rs = $query->result_array($query);
-        $this->data["rs"] = $rs;*/
-        self::userDetailBase($id);
+        self::userDetailBase($UserRole,$id);
     }
     public function userListDetailTraceSearch($id)
     {
@@ -259,13 +268,23 @@ class User extends MY_Controller {
             $where = " $where $and app_key like '%$app_key%' ";
             $and = 'and';
         }
-        if($createTime)
+        $is_date = is_Date($createTime,'Y-m-d h:i')?true:false;
+        $is_date1 = is_Date($createTime1,'Y-m-d h:i')?true:false;
+
+        if($is_date || $is_date1)
         {
-            $data["createTime"] = $createTime;
-        }
-        if($createTime1)
-        {
-            $data["createTime1"] = $createTime1;
+            if($is_date && $is_date1)
+            {
+                $where = " $and create_time >= '$createTime' and create_time <= '$createTime'";
+            }
+            else if($is_date)
+            {
+                $where = " $and create_time >= '$createTime'";
+            }
+            else if($is_date)
+            {
+                $where = " $and create_time >= '$createTime1'";
+            }
         }
 
         $sql = "select * from User_Active_Log WHERE user_id=$id$where LIMIT $iDisplayStart,$iDisplayLength";
@@ -282,6 +301,30 @@ class User extends MY_Controller {
         echo responseTrueStr(
             '',$data
         );
+    }
+    //供应商市场列表
+    public function userCashpoolList($UserRole,$id)
+    {
+        $this->data['CashpoolPageshow'] = "pageshow";
+        $this->data["cashpool"] = "active";
+        $sql = "select  p.CashpoolCode, -- 市场编号
+                        p.CompanyDivision, -- 市场名称
+                        p.CurrencyName, -- 货币币别
+                        p.CurrencySign, -- 货币标识
+                        p.PaymentDay, -- 付款方式
+                        p.PaymentType, -- 支付周期类型
+                        p.NextPaydate, -- 下个付款日期
+                        sc.CashpoolStatus -- 市场状态
+                        from 
+                        Users_Profile c
+                        inner join `Customer_Suppliers_Users` u on u.UserEmail = c.EmailAddress
+                        inner join `Customer_Suppliers` s ON s.Id = u.SupplierId  
+                        inner join `Customer_Cashpool` p ON p.CashpoolCode = s.CashpoolCode
+                        left join `stat_current_cashpools_vendors` sc ON sc.CashpoolCode= s.CashpoolCode and sc.Vendorcode=s.Vendorcode
+                        where u.UserStatus = 1 and c.UserId=$id";
+        $rs =$this->db->query($sql)->result_array();
+        $this->data["cashpoolList"] = $rs;
+        self::userDetailBase($UserRole,$id);
     }
     //改变用户状态
     public function userListForChangeStatusDo($id)
