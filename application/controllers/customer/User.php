@@ -42,6 +42,8 @@ class User extends MY_Controller {
     var $right = '';
     var $datestring = "%Y-%m-%d";
     var $dateStringWithTime = "%Y-%m-%d %H:%i:%s";
+    var $buyerKey = 'buyer';//买家传过来的参数
+    var $vendorKey = 'vendor';//供应商传过来的参数
 
 
     public function __construct() {
@@ -148,10 +150,10 @@ class User extends MY_Controller {
     {
         $this->data['id'] = $id;
         $this->data['UserRole'] = $UserRole;
-        $title = $UserRole == "buyer"?"Buyer User Manage":($UserRole == "vendor"?"Supplier User Manage":"User Manage");//
-        $uri = $UserRole == "buyer"?"/userBuyerList":($UserRole == "vendor"?"/userVendorList":"");
+        $title = $UserRole == $this->buyerKey?"买家用户列表":($UserRole == $this->vendorKey?"供应用户列表":"User Manage");//
+        $uri = $UserRole == $this->buyerKey?"/userBuyerList":($UserRole == $this->vendorKey?"/userVendorList":"");
         $this->data['pre_nav'] = array('title' => $title, 'uri'=> $this->current_controller.$uri);
-        $this->data['title'] = 'User Detail';
+        $this->data['title'] = '用户详情';
         $this->load->view('customer/user_list_detail', $this->data);
     }
 
@@ -210,6 +212,28 @@ class User extends MY_Controller {
         $query =$this->db->query($sql);
         $rs = $query->result_array($query);
         $this->data["rsCompany"] = $rs;
+        self::userDetailBase($UserRole,$id);
+    }
+    public function userLinkmanList($UserRole,$id)
+    {
+        $this->data["LinkmanPageshow"] = "pageshow";
+        $this->data["linkman"] = "active";
+        $sql = "SELECT
+                    *
+                FROM
+                    Customer_User
+                WHERE
+                    UserEmail IN (
+                        SELECT
+                            EmailAddress
+                        FROM
+                            Users_Profile
+                        WHERE
+                            UserId = $id
+                   )";
+        $query =$this->db->query($sql);
+        $rs = $query->result_array($query);
+        $this->data["rsLinkmanList"] = $rs;
         self::userDetailBase($UserRole,$id);
     }
     //跟踪日志
@@ -302,12 +326,14 @@ class User extends MY_Controller {
             '',$data
         );
     }
-    //供应商市场列表
+    //供应商市场或买家市场列表
     public function userCashpoolList($UserRole,$id)
     {
         $this->data['CashpoolPageshow'] = "pageshow";
         $this->data["cashpool"] = "active";
-        $sql = "select  p.CashpoolCode, -- 市场编号
+        if($UserRole==$this->vendorKey) {
+            $sql = "select  c1.CompanyName, -- 市场所属公司
+						p.CashpoolCode, -- 市场编号
                         p.CompanyDivision, -- 市场名称
                         p.CurrencyName, -- 货币币别
                         p.CurrencySign, -- 货币标识
@@ -320,8 +346,35 @@ class User extends MY_Controller {
                         inner join `Customer_Suppliers_Users` u on u.UserEmail = c.EmailAddress
                         inner join `Customer_Suppliers` s ON s.Id = u.SupplierId  
                         inner join `Customer_Cashpool` p ON p.CashpoolCode = s.CashpoolCode
+                        LEFT JOIN Base_Companys c1 ON c1.Id = p.CompanyId
                         left join `stat_current_cashpools_vendors` sc ON sc.CashpoolCode= s.CashpoolCode and sc.Vendorcode=s.Vendorcode
                         where u.UserStatus = 1 and c.UserId=$id";
+        }
+        else if($UserRole == $this->buyerKey)
+        {
+            $sql = "SELECT
+                        c.CompanyName, -- 市场所属公司
+						p.CashpoolCode, -- 市场编号
+                        p.CompanyDivision, -- 市场名称
+                        p.CurrencyName, -- 货币币别
+                        p.CurrencySign, -- 货币标识
+                        p.PaymentDay, -- 付款方式
+                        p.PaymentType, -- 支付周期类型
+                        p.NextPaydate, -- 下个付款日期
+						sc.CashpoolStatus -- 市场状态
+                    FROM
+                        Users_Profile a
+                        INNER JOIN Customer_User b ON a.EmailAddress = b.UserEmail
+                        INNER JOIN Base_Companys c ON b.CompanyId = c.Id
+                        INNER JOIN Customer_Cashpool p ON p.CompanyId=c.Id
+                        LEFT JOIN stat_current_cashpools sc on sc.CashpoolCode= p.CashpoolCode
+                    WHERE
+                        a.UserId = $id";
+        }
+        else
+        {
+            return;
+        }
         $rs =$this->db->query($sql)->result_array();
         $this->data["cashpoolList"] = $rs;
         self::userDetailBase($UserRole,$id);

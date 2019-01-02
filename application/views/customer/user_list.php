@@ -1,13 +1,10 @@
 <?php  include  $GLOBALS['view_folder'].'customer/__header.php'; ?>
-
-
-<style>        
+<style>
         
     td.highlight {
         background-color: whitesmoke !important;
     }
-    .pageshow
-    {
+    .pageshow {
         display: block; !important;
     }
    .grapha-header h5{
@@ -24,8 +21,7 @@
 
         border-bottom:1px solid #b1b1b1;
     }
-    #myTable .split2:before
-    {
+    #myTable .split2:before {
         content:" / ";
     }
     #myTable th {
@@ -151,13 +147,5 @@
 						);
 				});
         })
-
-      
-      
-     
-
 </script>
-
-
-
 <?php  include  $GLOBALS['view_folder'].'customer/__footer.php'; ?>

@@ -43,11 +43,14 @@
         <a href="/customer/user/userCompanyList/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">公司列表</a>
     </li>
     <?php }?>
-    <?php if($UserRole == 'vendor'){?>
+    <?php if($UserRole == "buyer"){?>
+    <li  class="<?php echo $linkman;?>" role="presentation">
+        <a href="/customer/user/userLinkmanList/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">联系人</a>
+    </li>
+    <?php }?>
     <li class="<?php echo $cashpool;?>" role="presentation">
         <a href="/customer/user/userCashpoolList/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">所属市场</a>
     </li>
-    <?php }?>
     <li class="<?php echo $trace;?>" role="presentation">
         <a href="/customer/user/userListDetailTrace/<?php echo $UserRole;?>/<?php echo $id;?>" class="nav-link" aria-controls="inactive" role="tab" data-toggle="tab">跟踪日志</a>
     </li>
@@ -61,6 +64,9 @@
                     <tr>
                         <th style="text-align: left">
                             市场编号
+                        </th>
+                        <th style="text-align: left">
+                            所属公司
                         </th>
                         <th style="text-align: left">
                             市场名称
@@ -81,6 +87,9 @@
                     <tr>
                         <td>
                             <?php echo $item["CashpoolCode"];?>
+                        </td>
+                        <td>
+                            <?php echo $item["CompanyName"];?>
                         </td>
                         <td>
                             <?php echo $item["CompanyDivision"];?>(<?php echo $item["CurrencyName"];?>)
@@ -130,6 +139,63 @@
             </div>
         </div>
 </div>
+<div class="infocls <?php echo $LinkmanPageshow;?>">
+    <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
+        <div class="graph-body">
+            <div class="table-body" style="padding:25px;">
+                <table id="myTableLinkmanList" class="display myTableCss" cellspacing="0">
+                    <thead>
+                    <th>称呼</th>
+                    <th>名字/姓氏</th>
+                    <th>角色</th>
+                    <th>职位</th>
+                    <th>状态</th>
+                    <th>电子邮件</th>
+                    <th>联系电话</th>
+                    </thead>
+                    <tbody>
+                    <?php foreach($rsLinkmanList as $item): ?>
+                        <tr>
+                            <td>
+                                <?php echo $item["UserName"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $item["LastName"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $item["UserRole"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $item["UserPosition"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $item['UserStatus']; ?>
+                            </td>
+                            <td>
+                                <?php echo $item["UserEmail"]; ?>
+                            </td>
+                            <td>
+                                <?php echo $item["UserContact"]; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+                <script>
+                    var tableLinkmanList = $('#myTableLinkmanList').DataTable({
+                        bStateSave:true,
+                        bFiltered:false,
+                        info:true,
+                        ordering:false,
+                        searching:false,
+                        bLengthChange: true,
+                        paging:true,
+                    });
+                </script>
+            </div>
+        </div>
+        </div>
+    </div>
 <div class="infocls <?php echo $CompanyPageshow;?>">
     <div class="row" style="margin: 0 auto;padding: 5px 0px 5px 0px;">
         <div class="graph-body">
